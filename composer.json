@@ -1,0 +1,25 @@
+{
+   "name": "jijihohococo/ichi-route",
+   "description": "Router Library For PHP Projects",
+   "keywords": ["router","php"],
+   "license": "MIT",
+   "authors": [
+      {
+         "name": "Lin Aung",
+         "email": "jijihohococo@gmail.com"
+      }
+   ],
+   "require": {
+      "php": ">=7.0|>=8.0"
+   },
+   "autoload": {
+        "psr-4": {
+            "JiJiHoHoCoCo\\IchiRoute\\": "src/"
+        },
+        "files": [
+         "src/helpers.php"
+        ]
+    },
+   "require-dev": {
+   }
+}
