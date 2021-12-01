@@ -9,8 +9,8 @@ class NotFound{
 		<html>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
 		<title>$message</title>
-		<body>
-		<div style="position: fixed;top:50%;left:50%;transform: translate(-50%, -50%);">
+		<body style="background-color: black;">
+		<div style="position: fixed;top:50%;left:50%;transform: translate(-50%, -50%);color:white;">
 		<p>$message</p>
 		</div>
 		</body>
