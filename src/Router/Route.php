@@ -24,6 +24,9 @@ class Route{
 	}
 
 	public function setRedis($redis,int $redisCachedTime=NULL){
+		if(!defined('Redis')){
+			throw new \Exception("Please install redis in your server and php redis firstly.", 1);
+		}
 		if(!is_a($redis,'Redis')){
 			throw new \Exception("You need to use php redis object", 1);
 		}
@@ -40,6 +43,9 @@ class Route{
 	}
 
 	public function setMemcached($memcached,int $memcachedCachedTime=0){
+		if(!defined('Memcached')){
+			throw new \Exception("Please install memcached in your server and php memcached extension firstly.", 1);
+		}
 		if(!is_a($redis,'Memcached')){
 			throw new \Exception("You need to use php memcached object", 1);
 		}
