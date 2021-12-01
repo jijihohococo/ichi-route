@@ -14,18 +14,23 @@ class RouteCache{
 	public function set(string $routeKey,string $routeMethod,int $expiredTime=NULL){
 
 		$expiredTime=$expiredTime!==NULL ? addExpiredDateTime($expiredTime) : $expiredTime;
-		$stmt=$this->pdo->prepare("INSERT INTO ichi_routes (route_key, route_method,expired_time) VALUES (?, ?, ?)");
+		$currentDateTime=date('Y-m-d H:i:s');
+		$stmt=$this->pdo->prepare("INSERT INTO ichi_routes (route_key, route_method,expired_time,created_time) VALUES (?, ?, ?, ?)");
 		$stmt->bindParam(1,$routeKey);
 		$stmt->bindParam(2,$routeMethod);
 		$stmt->bindParam(3,$expiredTime);
+		$stmt->bindParam(4,$currentDateTime);
 		$stmt->execute();
 	}
 
 	private function update(string $routeKey){
+		$currentDateTime=date('Y-m-d H:i:s');
 		$expiredTime=$this->pdoCachedTime!==NULL ? addExpiredDateTime($this->pdoCachedTime) : $this->pdoCachedTime;
-		$stmt=$this->pdo->prepare("UPDATE ichi_routes SET expired_time = ? WHERE route_key = ?");
+		$stmt=$this->pdo->prepare("UPDATE ichi_routes SET expired_time = ? ,
+			updated_time = ? WHERE route_key = ?");
 		$stmt->bindParam(1,$expiredTime);
-		$stmt->bindParam(2,$routeKey);
+		$stmt->bindParam(2,$currentDateTime);
+		$stmt->bindParam(3,$routeKey);
 		$stmt->execute();
 	}
 
