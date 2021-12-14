@@ -6,7 +6,7 @@ use JiJiHoHoCoCo\IchiRoute\Container\DependencyInject;
 use JiJiHoHoCoCo\IchiRoute\Middleware\RouteMiddleware;
 use JiJiHoHoCoCo\IchiRoute\Cache\RouteCache;
 use JiJiHoHoCoCo\IchiRoute\UI\NotFound;
-use ReflectionMethod,PDO;
+use ReflectionMethod,PDO,ReflectionFunction;
 class Route{
 
 	private $routes,$groupURL,$parameterRoutes=[];
@@ -72,7 +72,10 @@ class Route{
 		if(func_num_args()>=1){
 			$parameters=func_get_args();
 			if(is_callable($parameters[0])){
-				return $parameters[0]();
+				$function=$parameters[0];
+				unset($parameters[0]);
+				$reflectionFunction=new ReflectionFunction($function);
+				return $reflectionFunction->invokeArgs($parameters);
 			}else{
 				$calledFunction=explode('@',  $parameters[0] );
 				if(isset($calledFunction[0]) && isset($calledFunction[1])){
