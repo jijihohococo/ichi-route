@@ -1,5 +1,13 @@
 <?php
 
+if(!function_exists('generateCSRFToken')){
+	function generateCSRFToken(){
+		if(empty($_SESSION['csrf_token'])){
+			$_SESSION['csrf_token']=bin2hex(random_bytes(32));
+		}
+	}
+}
+
 if(!function_exists('getDirectURL')){
 	function getDirectURL($path=null){
 		$url=parse_url($path==null ? $_SERVER["REQUEST_URI"] : $path, PHP_URL_PATH);
