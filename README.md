@@ -13,6 +13,7 @@ This package is Open Source According to [MIT license](LICENSE.md)
 * [Paramter Route](#parameter-route)
 * [Resource Route](#resource-route)
 * [Prefix Route](#prefix-route)
+* [CSRF Token Authentication](#csrf-token-authentication)
 * [Dependency Injection](#dependency-injection)
 * [Middleware](#middleware)
 * [CORS](#cors)
@@ -179,6 +180,10 @@ So the below url is able to use
 
 You can add the single routes and parameter routes in the group closure function.
 
+## CSRF Token Authentication
+
+
+
 ## Dependency Injection
 
 You can make dependency injection with controller class. 
@@ -192,12 +197,14 @@ You must have interface and class according to the below format
 | ItemInterface           | Item            |
 | ItemRepositoryInterface | Item Repository |
 
+The functions of class that dependency injected will automatically run
+
 In your controller class
 
 ```php
 namespace App\Controllers;
 
-use App\Repositories\{ItemRepositoryInteface,ItemRepository};
+use App\Repositories\ItemRepositoryInteface;
 class ItemController{
 
 	public $item;

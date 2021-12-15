@@ -1,6 +1,7 @@
 <?php
 
 namespace JiJiHoHoCoCo\IchiRoute\Middleware;
+use ReflectionMethod;
 class RouteMiddleware{
 
 	
@@ -11,9 +12,9 @@ class RouteMiddleware{
 			$middlewareData=explode(':', $middleware);
 			if(isset($middlewareData[0])){
 				$class=$middlewareData[0];
-				$middlewareClassString=strpos($class, 'JiJiHoHoCoCo\IchiRoute\Middleware')==TRUE ? $class : $route->getBaseMiddlewarePath().$class;
+				$middlewareClassString=$route->getBaseMiddlewarePath().$class;
 				$middlewareClass=new $middlewareClassString;
-				if(!$middlewareClass instanceof MainMiddleware){
+				if(!$middlewareClass instanceof \App\Middleware\MainMiddleware){
 					throw new \Exception("You need to extend JiJiHoHoCoCo\IchiRoute\Middleware\MainMiddleware", 1);
 				}
 				if(!method_exists($middlewareClass, 'handle')){
@@ -37,6 +38,8 @@ class RouteMiddleware{
 				throw new \Exception("You don't pass the middleware class", 1);
 			}
 		}
-		return $middlewareObjects[0]->handle();
+		$firstMiddlewareObject=$middlewareObjects[0];
+		$reflectionMethod=new ReflectionMethod(get_class($firstMiddlewareObject) , 'handle' );
+		return $reflectionMethod->invokeArgs($firstMiddlewareObject , $firstMiddlewareObject->getParameters());
 	}
 }
