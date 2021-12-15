@@ -10,7 +10,8 @@ class CORSMiddleware{
 		$this->getAccessControlAllowOrigin();
 		$this->getAccessControlMethods();
 		$this->getAccessControlHeaders();
-		header('Access-Control-Allow-Credentials: ');
+		$this->getAccessControlCredential();
+		$this->getAccessControlMaxAge();
 
 		return  $this->next();
 	}
@@ -54,5 +55,12 @@ class CORSMiddleware{
 
 	private function getAccessControlCredential(){
 		header('Access-Control-Allow-Credentials: '.CORS::getAllowedCredential());
+	}
+
+	private function getAccessControlMaxAge(){
+		$age=CORS::getMaxAge();
+		if($age>0){
+			header('Access-Control-Max-Age: '.$age);
+		}
 	}
 }

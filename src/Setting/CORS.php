@@ -4,8 +4,9 @@ namespace JiJiHoHoCoCo\IchiRoute\Setting;
 
 class CORS{
 
-	private static $availableSites , $availableMethods , $availableHeaders ;
-	private static $allowedCredential = 'false';
+	private static $availableSites , $availableMethods , $availableHeaders;
+	private static $maxAge = 0;
+	private static $allowedCredential = FALSE;
 
 	public static function setAvailableSites(array $sites){
 		self::$availableSites=$sites;
@@ -32,10 +33,18 @@ class CORS{
 	}
 
 	public static function setToAllowCredential(){
-		self::$allowedCredential='true';
+		self::$allowedCredential=TRUE;
 	}
 
 	public static function getAllowedCredential(){
-		return self::$allowedCredential;
+		return self::$allowedCredential==TRUE ? 'true' : 'false';
+	}
+
+	public static function setMaxAge(int $age){
+		self::$maxAge=$age;
+	}
+
+	public static function getMaxAge(){
+		return self::$maxAge;
 	}
 }
