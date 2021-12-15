@@ -52,3 +52,19 @@ if(!function_exists('route')){
 		return '/' . $url;
 	}
 }
+
+if(!function_exists('getRequestDomain')){
+	function getRequestDomain(){
+		if(isset($_SERVER['HTTP_ORIGIN'])){
+			return $_SERVER['HTTP_ORIGIN'];
+		}elseif(isset($_SERVER['HTTP_REFERER'])){
+			return substr($_SERVER['HTTP_REFERER'], 0, -1);
+		}
+	}
+}
+
+if(!function_exists('getAccessData')){
+	function getAccessData($data){
+		return is_array($data) ? $data : '*';
+	}
+}
