@@ -15,6 +15,7 @@ This package is Open Source According to [MIT license](LICENSE.md)
 * [Prefix Route](#prefix-route)
 * [Dependency Injection](#dependency-injection)
 * [Middleware](#middleware)
+* [CORS](#cors)
 * [Caching Route](#caching-route)
 * [Customized Functions](#customized-functions)
 
@@ -32,6 +33,7 @@ You can add routes with "get","post","put","delete" and "head" functions.
 
 You can add route with closure function or the function of controller class.
 
+<i>With closure function</i>
 ```php
 use JiJiHoHoCoCo\IchiRoute\Router\Route;
 
@@ -39,7 +41,30 @@ $route=new Route;
 $route->get('items',function(){
 	echo "show items";
 });
+```
+
+<i>With Controller class</i>
+```php
+
 $route->get('items','App\Controllers\ItemController@show');
+
+```
+<b>You must autoload your the controller folder before using the route function in your composer.json</b>
+
+```json
+"autoload": {
+	"psr-4": {
+		"App\\": "app/"
+	}
+}
+```
+
+If you have the same controller path for all controllers, you can set base controller path for all routes before adding routes.
+
+```php
+
+$route->setBaseControllerPath('App\Controllers');
+
 ```
 
 To run all of your routes, you must
@@ -138,9 +163,70 @@ class ItemController{
 
 ## Prefix Route
 
+You can use prefix route to make groups
+
+```php
+$route->group(['url_group'=>'admin'],function(){
+	$this->get('items','App\Controllers\ItemController@getItems');
+});
+```
+
+So the below url is able to use
+
+```php
+'admin/items'
+```
+
+You can add the single routes and parameter routes in the group closure function.
+
 ## Dependency Injection
 
+You can make dependency injection with controller class. 
+
+You must have interface and class according to the below format
+
+<b>Your interface and class must be autoloaded</b>
+
+| Interface               | Class           |
+|-------------------------|-----------------|
+| ItemInterface           | Item            |
+| ItemRepositoryInterface | Item Repository |
+
+In your controller class
+
+```php
+namespace App\Controllers;
+
+use App\Repositories\{ItemRepositoryInteface,ItemRepository};
+class ItemController{
+
+	public $item;
+	public function __construct(ItemRepositoryInteface $item){
+		$this->item=$item;
+	}
+}
+```
+You can also add another dependency injection in your repositories.
+
+```php
+namespace App\Repositories;
+
+use App\Repositories\{ItemRepositoryInteface,BrandRepositoryInterface};
+
+class ItemRepository implements ItemRepositoryInteface{
+
+	public $brand;
+
+	public function __construct(BrandRepositoryInterface $brand){
+		$this->brand=$brand;
+	}
+}
+```
+
+
 ## Middleware
+
+## CORS
 
 ## Caching Route
 
