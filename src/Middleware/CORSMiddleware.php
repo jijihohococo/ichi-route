@@ -28,6 +28,10 @@ class CORSMiddleware{
 					break;
 				}
 			}
+			$availableSitesRegex=CORS::getAvailableSitesRegex();
+			if($availableSitesRegex!==NULL && preg_match($availableSitesRegex, $requestDomain) ){
+				header('Access-Control-Allow-Origin: '.$requestDomain);
+			}
 
 		}
 	}

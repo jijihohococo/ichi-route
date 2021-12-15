@@ -4,7 +4,7 @@ namespace JiJiHoHoCoCo\IchiRoute\Setting;
 
 class CORS{
 
-	private static $availableSites , $availableMethods , $availableHeaders;
+	private static $availableSites , $availableMethods , $availableHeaders , $availableSitesRegex;
 	private static $maxAge = 0;
 	private static $allowedCredential = FALSE;
 
@@ -46,5 +46,13 @@ class CORS{
 
 	public static function getMaxAge(){
 		return self::$maxAge;
+	}
+
+	public static function setAvailableSitesRegex(string $regex){
+		self::$availableSitesRegex=$regex;
+	}
+
+	public static function getAvailableSitesRegex(){
+		return self::$availableSitesRegex;
 	}
 }

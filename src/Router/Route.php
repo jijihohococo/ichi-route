@@ -399,8 +399,5 @@ public function run(){
 		}
 	}
 	return $this->showErrorPage();
-	// $errorPage= is_callable($this->errorPage) ? $this->getErrorPage() : $this->showErrorPage();
-	// $errorPage;
-	// exit();
 }
 }
