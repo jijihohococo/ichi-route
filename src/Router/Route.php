@@ -10,7 +10,7 @@ use ReflectionMethod,PDO,ReflectionFunction;
 class Route{
 
 	private $routes,$groupURL,$parameterRoutes=[];
-	private $currentGroup,$urlParameters,$errorPage;
+	private $currentGroup,$urlParameters;
 	private $numberOfGroups=0;
 	private $baseControllerPath,$baseMiddlewarePath;
 
@@ -98,19 +98,9 @@ class Route{
 		$this->defaultMiddlewares=$middlewares;
 	}
 
-	public function setErrorPage(callable $errorPage){
-		$this->errorPage=$errorPage;
-	}
-
-	public function getErrorPage(){
-		$errorPageFunc=$this->errorPage;
-		return $errorPageFunc();
-	}
-
 	public function showErrorPage(){
 		http_response_code(404);
-		$notFound=new NotFound;
-		echo $notFound->show();
+		echo NotFound::show();
 	}
 
 	public function getBaseControllerPath(){
@@ -408,8 +398,9 @@ public function run(){
 			}
 		}
 	}
-	$errorPage= is_callable($this->errorPage) ? $this->getErrorPage() : $this->showErrorPage();
-	$errorPage;
-	exit();
+	return $this->showErrorPage();
+	// $errorPage= is_callable($this->errorPage) ? $this->getErrorPage() : $this->showErrorPage();
+	// $errorPage;
+	// exit();
 }
 }
