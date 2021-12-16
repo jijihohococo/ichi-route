@@ -16,6 +16,7 @@ This package is Open Source According to [MIT license](LICENSE.md)
 * [Dependency Injection](#dependency-injection)
 * [Middleware](#middleware)
 * [CSRF Token Authentication](#csrf-token-authentication)
+* [API Request Authentication](#api-request-authentication)
 * [CORS](#cors)
 * [Caching Route](#caching-route)
 * [Customized Functions](#customized-functions)
@@ -68,7 +69,9 @@ $route->setBaseControllerPath('App\Controllers');
 
 ```
 
-To run all of your routes, you must
+To run all of your routes, you must use "run()" function.
+
+<b>You must use "run()" function after declaring all routes for your system</b>
 
 ```php
 
@@ -368,8 +371,8 @@ You can add middlewares in prefix routes like the way you do in single routes an
 
 ```php
 
-$route->group(['url_group' => 'admin' , 'middleware' => 
-	['App\Middlewares\CheckAdminMiddleware']
+$route->group(['url_group' => 'admin' , 
+	'middleware' => ['App\Middlewares\CheckAdminMiddleware']
  ],function(){
  	$this->resource('items','App\Controllers\ItemController');
  });
@@ -385,6 +388,17 @@ $route->group(['middleare' => ['App\Middlewares\CheckUserMiddleware'] ],function
 });
 
 ```
+
+If you have the same middleware path for all middlewares, you can set base middleware path for all routes before adding routes.
+
+```php
+
+$route->setBaseControllerPath('App\Middlewares');
+
+```
+
+<b>There are some middlewares that already written in this library.
+For those middlewares you must declare their middleware path completely.</b>
 
 ## CSRF Token Authentication
 
@@ -419,9 +433,54 @@ $route->group(['middleare' =>
 });
 
 ```
+## API Request Authentication
+
+You can add middleware to accept only API request for your route
+
+```php
+
+$route->get('items_api','App\Controllers\ItemController@getItems',[
+	'JiJiHoHoCoCo\IchiRoute\Middleware\APIMiddleware'
+]);
+
+```
 
 ## CORS
 
+You can make CORS to get your data from another domains
+
+```php
+
+$route->get('items_api','App\Controllers\ItemController@getItems',[
+	'JiJiHoHoCoCo\IchiRoute\Middleware\CORSMiddleware'
+]);
+
+```
+
+You can make options for your CORS with <b>JiJiHoHoCoCo\IchiRoute\Setting\CORS</b>
+
+```php
+ 
+use JiJiHoHoCoCo\IchiRoute\Setting\CORS;
+
+CORS::setAvialableSites(['http://domain-one.com','http://domain-two.com']); 
+// To set Access Control Allow Origins (default is '*')
+
+CORS::setAvailableSitesRegex(['/w3schools/']);
+// To set Access Control Allow Origins according to regex
+
+CORS::setAvialableMethods(['GET','POST']);
+// To set Access Control Allow Origin Methods (default is '*')
+
+CORS::setAvailableHeaders(['X-Custom-Header','Upgrade-Insecure-Requests']);
+// To set Access Control Allow Origin Headers (default is '*')
+
+CORS::setToAllowCredential();
+// To set Access Control Allow Credentials to TRUE. (default is 'false')
+
+CORS::setMaxAge(3600);
+// To set Access Control Max Age (default is 0)
+```
 ## Caching Route
 
 
