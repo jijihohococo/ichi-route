@@ -13,9 +13,9 @@ This package is Open Source According to [MIT license](LICENSE.md)
 * [Paramter Route](#parameter-route)
 * [Resource Route](#resource-route)
 * [Prefix Route](#prefix-route)
-* [CSRF Token Authentication](#csrf-token-authentication)
 * [Dependency Injection](#dependency-injection)
 * [Middleware](#middleware)
+* [CSRF Token Authentication](#csrf-token-authentication)
 * [CORS](#cors)
 * [Caching Route](#caching-route)
 * [Customized Functions](#customized-functions)
@@ -168,21 +168,24 @@ You can use prefix route to make groups
 
 ```php
 $route->group(['url_group'=>'admin'],function(){
+	
 	$this->get('items','App\Controllers\ItemController@getItems');
+	$this->get('brands','App\Controllers\BrandController@getBrands');
 });
 ```
 
-So the below url is able to use
+So the below url are able to use
 
 ```php
+
 'admin/items'
+'admin/brands'
+
 ```
 
 You can add the single routes and parameter routes in the group closure function.
 
-## CSRF Token Authentication
-
-
+<b>Don't include '/' in declaring "url_group"</b>
 
 ## Dependency Injection
 
@@ -230,8 +233,156 @@ class ItemRepository implements ItemRepositoryInteface{
 }
 ```
 
-
 ## Middleware
+
+You can add middlewares in single route like below
+
+```php
+
+$route->get('order','App\Controllers\OrderController@order',[
+'App\Middlewares\OrderMiddleware'
+]);
+
+```
+You must delcare middleware class
+
+<b>Your middleware classes must be autoloaded in composer as we mentioned before</b>
+```php
+
+namespace App\Middlewares;
+
+use JiJiHoHoCoCo\IchiRoute\Middleware\MainMiddleware;
+
+class OrderMiddleware extends MainMiddleware{
+
+	public function handle(){
+		//--your business login--//
+		return $this->next();
+	}
+}
+```
+You must extend <b>JiJiHoHoCoCo\IchiRoute\Middleware\MainMiddleware</b> and add "handle()" function in your "handle" function, you must always return "next()" function. You can check your business transactions in this "handle" function.
+
+You can add multiple middleware classes
+
+```php
+
+$route->get('order','App\Controllers\OrderController@order',[
+	'App\Middlewares\LoginMiddleware',
+	'App\Middlewares\OrderMiddleware'
+]);
+
+```
+Those middlewares will be loaded sequently because of using "next()" function in each "handle()" function.
+
+You can add parameters in middleware with your parameter routes
+
+```php
+
+$route->get('items/{id}','App\Controllers\ItemController@getItems',[
+	'App\Middlewares\CheckItemMiddleware:id'
+]);
+
+```
+
+In your middleware class
+
+```php
+namespace App\Middlewares;
+
+use JiJiHoHoCoCo\IchiRoute\Middleware\MainMiddleware;
+
+class CheckItemMiddleware extends MainMiddleware{
+
+	public function handle($id){
+		//--your business login--//
+		return $this->next();
+	}
+
+}
+```
+
+You can add multiple parameters in middleware with your parameter routes
+
+```php
+
+$route->get('items/{id}/{stock_id}',
+	'App\Controllers\ItemController@getItems',[
+	'App\Middlewares\CheckItemMiddleware:id,stock_id'
+]);
+
+```
+In your middleware class
+
+```php
+namespace App\Middlewares;
+
+use JiJiHoHoCoCo\IchiRoute\Middleware\MainMiddleware;
+
+class CheckItemMiddleware extends MainMiddleware{
+
+	public function handle($id,$stock){
+		//--your business login--//
+		return $this->next();
+	}
+
+}
+```
+
+You can add middlewares in prefix routes like the way you do in single routes and parameter routes
+
+```php
+
+$route->group(['url_group' => 'admin' , 'middleware' => 
+	['App\Middlewares\CheckAdminMiddleware']
+ ],function(){
+ 	$this->resource('items','App\Controllers\ItemController');
+ });
+
+```
+
+You can add only middleware in prefix routes.
+
+```php
+
+$route->group(['middleare' => ['App\Middlewares\CheckUserMiddleware'] ],function(){
+	$this->get('order','App\Controllers\OrderController@order');
+});
+
+```
+
+## CSRF Token Authentication
+
+You can protect create and update route with CSRF Token Authentication
+
+You must generate CSRF Token before declaring the routes
+
+```php
+
+use JiJiHoHoCoCo\IchiRoute\Router\Route;
+
+generateCSRFToken();
+
+$route=new Route;
+$route->post('items','App\ItemController@create',[
+'JiJiHoHoCoCo\IchiRoute\Middleware\CSRFMiddleware'
+]);
+```
+
+You can add <b>JiJiHoHoCoCo\IchiRoute\Middleware\CSRFMiddleware</b> in your prefix routes too.
+
+```php
+
+use JiJiHoHoCoCo\IchiRoute\Router\Route;
+
+generateCSRFToken();
+
+$route=new Route;
+$route->group(['middleare' => ['JiJiHoHoCoCo\IchiRoute\Middleware\CSRFMiddleware'] ],function(){
+	$this->post('items','App\ItemController@create');
+});
+
+```
 
 ## CORS
 
