@@ -76,6 +76,14 @@ $route->run();
 
 ```
 
+After running route function, the routes (URL) are able to run
+
+```php
+
+'items/' (GET METHOD)
+
+```
+
 ## Parameter Route
 
 In many cases, you have a time to make parameter route
@@ -110,6 +118,15 @@ $route->get('items/show/{id}',function($id){
 
 ```
 
+After running route function, the routes (URL) are able to run
+
+```php
+
+'items/show/1' (GET METHOD)
+'items/show/2' (GET METHOD)
+
+```
+
 ## Resource Route
 
 You can CRUD routes with one route method
@@ -139,6 +156,11 @@ class ItemController{
 
 	}
 
+	// POST METHOD //
+	// 'items/create' //
+	public function create(){
+
+	}
 
 	// GET METHOD //
 	// 'items/{id}/edit'
@@ -162,6 +184,19 @@ class ItemController{
 }
 ```
 
+After running route function, the routes (URL) are able to run
+
+```php
+	
+	'items/' (GET METHOD) // Go to to get items' list
+	'items/create' (GET METHOD) // Go to create item
+	'items/create' (POST METHOD) // Create items
+	'items/1/edit' (GET METHOD) // Go to update item
+	'items/1/edit' (PUT METHOD) // Update item
+	'items/1/destroy' (DELETE METHOD) // Delete item
+
+```
+
 ## Prefix Route
 
 You can use prefix route to make groups
@@ -178,8 +213,8 @@ So the below url are able to use
 
 ```php
 
-'admin/items'
-'admin/brands'
+'admin/items' (GET METHOD)
+'admin/brands' (GET METHOD)
 
 ```
 
@@ -378,7 +413,8 @@ use JiJiHoHoCoCo\IchiRoute\Router\Route;
 generateCSRFToken();
 
 $route=new Route;
-$route->group(['middleare' => ['JiJiHoHoCoCo\IchiRoute\Middleware\CSRFMiddleware'] ],function(){
+$route->group(['middleare' => 
+	['JiJiHoHoCoCo\IchiRoute\Middleware\CSRFMiddleware'] ],function(){
 	$this->post('items','App\ItemController@create');
 });
 
