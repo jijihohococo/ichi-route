@@ -90,7 +90,7 @@ After running route function, the routes (URL) are able to run
 
 ## Using Routes
 
-After declaring routes, you can use "route" function to make more clear.
+Calling routes in frontend
 	
 ```html
 
