@@ -8,6 +8,12 @@ if(!function_exists('generateCSRFToken')){
 	}
 }
 
+if(!function_exists('csrfToken')){
+	function csrfToken(){
+		echo '<input type="hidden" name="csrf_token" value="'.$_SESSION['csrf_token'].'">';
+	}
+}
+
 if(!function_exists('getDirectURL')){
 	function getDirectURL($path=null){
 		$url=parse_url($path==null ? $_SERVER["REQUEST_URI"] : $path, PHP_URL_PATH);
