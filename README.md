@@ -10,6 +10,7 @@ This package is Open Source According to [MIT license](LICENSE.md)
 
 * [Installation](#installation)
 * [Single Route](#single-route)
+* [Using Routes](#using-routes)
 * [Paramter Route](#parameter-route)
 * [Resource Route](#resource-route)
 * [Prefix Route](#prefix-route)
@@ -87,6 +88,16 @@ After running route function, the routes (URL) are able to run
 
 ```
 
+## Using Routes
+
+After declaring routes, you can use "route" function to make more clear.
+	
+```html
+
+<a href="<?php echo route('items'); ?>">Items</a>
+
+```
+
 ## Parameter Route
 
 In many cases, you have a time to make parameter route
@@ -128,6 +139,14 @@ After running route function, the routes (URL) are able to run
 'items/show/1' (GET METHOD)
 'items/show/2' (GET METHOD)
 
+```
+
+Calling routes in frontend
+
+```html
+
+<a href="<?php echo route('items/show/1'); ?>" >Item 1</a> 
+<a href="<?php echo route('items/show/2'); ?>" >Item 2</a> 
 ```
 
 ## Resource Route
@@ -431,6 +450,18 @@ $route->group(['middleare' =>
 	['JiJiHoHoCoCo\IchiRoute\Middleware\CSRFMiddleware'] ],function(){
 	$this->post('items','App\ItemController@create');
 });
+
+```
+
+In your frontend php file
+
+```html
+
+<form action="<?php echo route('items'); ?>" method="POST" >
+	<?php csrfToken(); ?>
+	<input type="text" name="name">
+	<input type="submit" name="submit">
+</form>
 
 ```
 ## API Request Authentication
