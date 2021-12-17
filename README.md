@@ -463,7 +463,7 @@ You can make options for your CORS with <b>JiJiHoHoCoCo\IchiRoute\Setting\CORS</
  
 use JiJiHoHoCoCo\IchiRoute\Setting\CORS;
 
-CORS::setAvialableSites(['http://domain-one.com','http://domain-two.com']); 
+CORS::setAvialableSites(['http://domain-one.com','http://domain-two.com']);
 // To set Access Control Allow Origins (default is '*')
 
 CORS::setAvailableSitesRegex(['/w3schools/']);
