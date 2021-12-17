@@ -20,6 +20,9 @@ This package is Open Source According to [MIT license](LICENSE.md)
 * [API Request Authentication](#api-request-authentication)
 * [CORS](#cors)
 * [Caching Route](#caching-route)
+	* [Caching with Database](#caching-with-database)
+	* [Caching with Redis](#caching-with-redis)
+	* [Caching with Memcached](#caching-with-memcached)
 * [Customized Functions](#customized-functions)
 
 ## Installation
@@ -91,7 +94,7 @@ After running route function, the routes (URL) are able to run
 ## Using Routes
 
 Calling routes in frontend
-	
+
 ```html
 
 <a href="<?php echo route('items'); ?>">Items</a>
@@ -412,13 +415,34 @@ If you have the same middleware path for all middlewares, you can set base middl
 
 ```php
 
-$route->setBaseControllerPath('App\Middlewares');
+$route->setBaseMiddlewarePath('App\Middlewares');
 
 ```
 
 <b>There are some middlewares that already written in this library.
 For those middlewares you must declare their middleware path completely.</b>
 
+If you have the middlewares that you want to check for all routes
+
+<i>If you don't delcare base middleware path</i>
+
+```php
+
+$route->defaultMiddlewares([
+'App\Middlewares\CheckUserMiddleware'
+]);
+
+```
+
+<i>If you declare base middleware path</i>
+
+```php
+
+$route->defaultMiddlewares([
+'CheckUserMiddleware'
+]);
+
+```
 ## CSRF Token Authentication
 
 You can protect create and update route with CSRF Token Authentication
@@ -514,5 +538,72 @@ CORS::setMaxAge(3600);
 ```
 ## Caching Route
 
+You can cache route with
+1. database
+2. Redis
+3. Memcached
 
+<b>You must do following instructions before adding routes</b>
 
+### Caching with Database
+
+You must run this SQL code to create "ichi_routes" table in your database
+
+```sql
+CREATE TABLE IF NOT EXISTS ichi_routes( 
+	id   INT AUTO_INCREMENT,
+	route_key  VARCHAR(100) NOT NULL,
+	route_method VARCHAR(100) NOT NULL,
+	expired_time VARCHAR(100) NULL,
+	PRIMARY KEY(id))
+```
+
+And add your pdo object with expired time in seconds
+
+```php
+
+$route->setPDO($pdoObject,10000);
+
+```
+
+You can also make without expired time
+
+```php
+
+$route->setPDO($pdoObject);
+
+```
+### Caching with Redis
+
+Add your redis object with expired time in seconds
+
+```php
+
+$route->setRedis($redisObject,10000);
+
+```
+
+You can also make without expired time
+
+```php
+
+$route->setRedis($redisObject);
+
+```
+### Caching with Memcached
+
+Add your memcached object with expired time in seconds
+
+```php
+
+$route->setMemcached($memcachedObject,10000);
+
+```
+
+You can also make without expired time
+
+```php
+
+$route->setMemcached($memcachedObject);
+
+```
