@@ -74,3 +74,9 @@ if(!function_exists('getAccessData')){
 		return is_array($data) ? $data : '*';
 	}
 }
+
+if(!function_exists('addFolderSlash')){
+	function addFolderSlash($path){
+		return substr($path,0,-1)!=='\\'?$path.'\\':$path;
+	}
+}
