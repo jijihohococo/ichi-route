@@ -20,6 +20,5 @@
          "src/helpers.php"
         ]
     },
-   "require-dev": {
-   }
+   "minimum-stability": "dev"
 }
