@@ -23,11 +23,12 @@ class DependencyInject{
 
 	public function createObjects($parameters){
 		$objects=[];
+		$interface='Interface';
 		foreach($parameters as $key => $parameter ){
-			if(!interface_exists($parameter)){
+			$type= str_replace($interface, '', (string)$parameter->getType());
+			if(!interface_exists($type.$interface)){
 				throw new \Exception($parameter . " Interface is not exist", 1);
 			}
-			$type= str_replace('Interface', '', (string)$parameter->getType());
 			$typeArray=explode('\\' , $type );
 			if(isset($typeArray[0])){
 				
