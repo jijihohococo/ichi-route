@@ -23,7 +23,7 @@ This package is Open Source According to [MIT license](LICENSE.md)
 	* [Caching with Database](#caching-with-database)
 	* [Caching with Redis](#caching-with-redis)
 	* [Caching with Memcached](#caching-with-memcached)
-* [Customized Functions](#customized-functions)
+* [Customization Error Page](#customization-error-page)
 
 ## Installation
 
