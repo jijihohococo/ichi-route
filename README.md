@@ -323,7 +323,7 @@ class OrderMiddleware extends MainMiddleware{
 	}
 }
 ```
-You must extend <b>JiJiHoHoCoCo\IchiRoute\Middleware\MainMiddleware</b> and add "handle()" function in your "handle" function, you must always return "next()" function. You can check your business transactions in this "handle" function.
+You must extend <b>JiJiHoHoCoCo\IchiRoute\Middleware\MainMiddleware</b> and add "handle()" function. In your "handle" function, you must always return "next()" function. You can check your business transactions in this "handle" function.
 
 You can add multiple middleware classes
 
