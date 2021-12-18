@@ -499,6 +499,8 @@ $route->get('items_api','App\Controllers\ItemController@getItems',[
 ]);
 
 ```
+To pass <b>JiJiHoHoCoCo\IchiRoute\Middleware\APIMiddleware</b>, you must add "application/json" value in your "Content-Type" header when you request that api route
+
 
 ## CORS
 
