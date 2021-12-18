@@ -28,7 +28,9 @@ This package is Open Source According to [MIT license](LICENSE.md)
 ## Installation
 
 ```php
-composer require jijihohococo/ichi-route
+
+composer require jijihohococo/ichi-route:dev-master
+
 ```
 
 ## Single Route

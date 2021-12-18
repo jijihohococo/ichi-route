@@ -80,6 +80,9 @@ class Route{
 				$calledFunction=explode('@',  $parameters[0] );
 				if(isset($calledFunction[0]) && isset($calledFunction[1])){
 					$className=$this->getBaseControllerPath().$calledFunction[0];
+					if(!class_exists($className)){
+						throw new \Exception($class . " is not exist", 1);
+					}
 					$functionName=$calledFunction[1];
 					unset($parameters[0]);
 					return $this->dependencyInject->getConstructor($className,$functionName,$parameters);

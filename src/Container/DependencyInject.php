@@ -6,6 +6,9 @@ class DependencyInject{
 
 	public function getConstructor($className,$functionName,$functionParameters){
 		$createdClass=$this->getObject($className);
+		if(!method_exists($createdClass, $functionName)){
+			throw new \Exception($functionName. " is not exist in ".$className, 1);
+		}
 		return call_user_func_array([$createdClass,$functionName], $functionParameters);
 	}
 
