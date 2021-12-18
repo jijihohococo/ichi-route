@@ -25,6 +25,7 @@ class NotFound{
 			</html>
 			HTML;
 		}
-		return self::$errorPage;
+		$errorPage=self::$errorPage;
+		return is_callable($errorPage) ? $errorPage($message,$code) : $errorPage ;
 	}
 }
