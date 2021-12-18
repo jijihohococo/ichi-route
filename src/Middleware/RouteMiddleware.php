@@ -12,10 +12,10 @@ class RouteMiddleware{
 			$middlewareData=explode(':', $middleware);
 			if(isset($middlewareData[0])){
 				$class=$middlewareData[0];
-				$middlewareClassString=$route->getBaseMiddlewarePath().$class;
+				$middlewareClassString=strpos($class, 'JiJiHoHoCoCo\IchiRoute\Middleware')!==FALSE ? $class : $route->getBaseMiddlewarePath().$class;
 				$middlewareClass=new $middlewareClassString;
-				if(!$middlewareClass instanceof \App\Middleware\MainMiddleware){
-					throw new \Exception("You need to extend JiJiHoHoCoCo\IchiRoute\Middleware\MainMiddleware", 1);
+				if(!$middlewareClass instanceof MainMiddleware){
+					throw new \Exception("Your ".$middlewareClassString." need to extend JiJiHoHoCoCo\IchiRoute\Middleware\MainMiddleware", 1);
 				}
 				if(!method_exists($middlewareClass, 'handle')){
 					throw new \Exception("You need to have 'handle' function in {$middlewareClassString}", 1);
