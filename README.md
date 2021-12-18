@@ -28,7 +28,7 @@ This package is Open Source According to [MIT license](LICENSE.md)
 ## Installation
 
 ```php
-
+composer require jijihohococo/ichi-route
 ```
 
 ## Single Route
@@ -541,7 +541,7 @@ CORS::setMaxAge(3600);
 ## Caching Route
 
 You can cache route with
-1. database
+1. Database
 2. Redis
 3. Memcached
 
@@ -677,3 +677,5 @@ $errorPage=function($message,$code){
 
 NotFound::setErrorPage($errorPage);
 ```
+
+In your customized function, you must have "$message" and "$code" parameters
