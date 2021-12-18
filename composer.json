@@ -1,7 +1,8 @@
 {
    "name": "jijihohococo/ichi-route",
+   "type": "library",
    "description": "Router Library For PHP Projects",
-   "keywords": ["router","php"],
+   "keywords": ["php router","php","router"],
    "license": "MIT",
    "authors": [
       {
