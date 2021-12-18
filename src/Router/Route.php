@@ -367,7 +367,7 @@ public function run(){
 		foreach($this->parameterRoutes as $urlKey=> $route){
 			$parameters=[];
 			$requestURL=getDirectURL(str_replace($requestMethod, '', $urlKey));
-			if(count($url)==count($requestURL) && $method==$route['method']){
+			if(count($requestURL)==count($urlData) && $method==$route['method']){
 				$middlewareParameters=[];
 				$parameterRoute=$route['parameters']; 
 				foreach($parameterRoute as $parameterKey => $parameter){
@@ -391,11 +391,12 @@ public function run(){
 					$parameters[0]=$availableParameterRoute['function'];
 					ksort($parameters);
 
-
 					$reflectionMethod=new ReflectionMethod((string)get_class($this),'callingRequest');
 					$reflectionMethod->setAccessible(true);
 					return $reflectionMethod->invokeArgs($this,$parameters);
 
+				}else{
+					$url=$urlData;
 				}
 
 			}
