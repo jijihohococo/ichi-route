@@ -23,7 +23,7 @@ This package is Open Source According to [MIT license](LICENSE.md)
 	* [Caching with Database](#caching-with-database)
 	* [Caching with Redis](#caching-with-redis)
 	* [Caching with Memcached](#caching-with-memcached)
-* [Customization Error Page](#customization-error-page)
+* [Error Page Customization](#error-page-customization)
 
 ## Installation
 
@@ -608,4 +608,72 @@ You can also make without expired time
 
 $route->setMemcached($memcachedObject);
 
+```
+
+## Error Page Customization
+
+You can call the error page (whatever it is default or customized)
+
+```php
+
+use JiJiHoHoCoCo\IchiRoute\UI\NotFound;
+
+echo NotFound::show();
+exit();
+```
+
+Default eror message is "404 - URL is not found".
+Default HTTP response code is 404.
+
+You can customize error message and HTTP response code
+
+```php
+
+use JiJiHoHoCoCo\IchiRoute\UI\NotFound;
+
+echo NotFound::show('403 - Unauthorized Request',403);
+exit();
+```
+
+If you don't like the default error page from this library,you can show the own error page
+
+```php
+
+use JiJiHoHoCoCo\IchiRoute\UI\NotFound;
+
+NotFound::setErrorPage('<!DOCTYPE html>
+<html>
+<head>
+<title>Page Title</title>
+</head>
+<body>
+
+<h1>404</h1>
+<p>404 URL</p>
+
+</body>
+</html>');
+```
+
+If you want to show more specific error according to your HTTP response code, you must create a function
+
+```php
+
+use JiJiHoHoCoCo\IchiRoute\UI\NotFound;
+
+$errorPage=function($message,$code){
+		return <<<HTML
+			<html>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+			<title>$message</title>
+			<body style="background-color: white;">
+			<div style="position: fixed;top:50%;left:50%;transform: translate(-50%, -50%);color:black;font-family: 'Nunito', sans-serif;">
+			<p>$message</p>
+			</div>
+			</body>
+			</html>
+			HTML;
+	};
+
+NotFound::setErrorPage($errorPage);
 ```
