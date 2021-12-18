@@ -5,12 +5,7 @@ use JiJiHoHoCoCo\IchiRoute\UI\NotFound;
 class APIMiddleware extends MainMiddleware{
 
 	public function handle(){
-		$headers=getallheaders();
-
-		if(isset($headers['Content-Type']) && $headers['Content-Type']!=='application/json' ){
-			echo NotFound::show('405 - Only API Request is allowed',405);
-			exit();
-		}
+		header('Accept: application/json');
 		return $this->next();
 	}
 }
