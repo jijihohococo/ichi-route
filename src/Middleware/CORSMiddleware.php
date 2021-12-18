@@ -3,7 +3,7 @@
 namespace JiJiHoHoCoCo\IchiRoute\Middleware;
 
 use JiJiHoHoCoCo\IchiRoute\Setting\CORS;
-class CORSMiddleware{
+class CORSMiddleware extends MainMiddleware{
 
 	public function handle(){
 
