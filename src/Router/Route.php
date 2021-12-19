@@ -6,6 +6,7 @@ use JiJiHoHoCoCo\IchiRoute\Container\DependencyInject;
 use JiJiHoHoCoCo\IchiRoute\Middleware\RouteMiddleware;
 use JiJiHoHoCoCo\IchiRoute\Cache\RouteCache;
 use JiJiHoHoCoCo\IchiRoute\UI\NotFound;
+use JiJiHoHoCoCo\IchiRoute\Setting\Host;
 use ReflectionMethod,PDO,ReflectionFunction;
 class Route{
 
@@ -18,9 +19,16 @@ class Route{
 
 	private $redis , $redisCachedTime , $memcached , $memcachedCachedTime , $pdo , $pdoCachedTime , $cacheMode ;
 
+	private $host , $currentDomain , $domains;
+
 	public function __construct(){
 		$this->dependencyInject=new DependencyInject;
 		$this->routeMiddleware=new RouteMiddleware;
+		$this->host=new Host;
+	}
+
+	public function setDefaultDomain(string $domain){
+		$this->host->setDefaultDomain($domain);
 	}
 
 	public function setRedis($redis,int $redisCachedTime=NULL){
@@ -127,6 +135,7 @@ class Route{
 				throw new \Exception($url." is duplicated", 1);
 			}
 			$this->routes[$url.'{'.$method.'}']=$this->getRouteData($parameters,$method);
+			$this->domains[ $this->currentDomain==NULL ? $this->host->getDefaultDomain() : $this->currentDomain ]=$this->routes[$url.'{'.$method.'}'];
 		}
 	}
 
@@ -146,6 +155,7 @@ class Route{
 				$i++;
 			}
 		}
+		$this->domains[ $this->currentDomain==NULL ? $this->host->getDefaultDomain() : $this->currentDomain ]=$this->parameterRoutes[$url.'{'.$method.'}'];
 	}
 
 	private function getRouteData($parameters,$method){
@@ -236,6 +246,12 @@ private function checkMiddleware($routes,$serverURL,$parameters=[]){
 	if($this->{$routes}[$serverURL]['middleware']!==NULL && !empty($this->{$routes}[$serverURL]['middleware']) ){
 		return $this->routeMiddleware->check($this->{$routes}[$serverURL]['middleware'],$this,$parameters);
 	}
+}
+
+public function domain(string $domain,callable $function){
+	$this->currentDomain=$domain;
+	$function->call($this);
+	$this->currentDomain=NULL;
 }
 
 public function group(array $data,callable $function){
