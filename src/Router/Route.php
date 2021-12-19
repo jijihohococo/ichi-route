@@ -123,19 +123,27 @@ class Route{
 		if(strpos($url,'{')==TRUE && strpos($url,'}')==TRUE ){
 			$this->addParameterRoutes($url,$parameters,$method);
 		}else{
+			if(isset($this->routes[$url.'{'.$method.'}'])){
+				throw new \Exception($url." is duplicated", 1);
+			}
 			$this->routes[$url.'{'.$method.'}']=$this->getRouteData($parameters,$method);
 		}
 	}
 
 	private function addParameterRoutes($url,$parameters,$method){
+		$i=0;
 		foreach(explode('/',$url) as $key => $urlData ){
 			if(substr($urlData,0,1)=='{' && substr($urlData,-1)=='}'){
 				if(isset($this->parameterRoutes[$url.'{'.$method.'}'])){
+					if($i==0){
+						throw new \Exception($url . " is duplicated" , 1);
+					}
 					$this->parameterRoutes[$url.'{'.$method.'}']['parameters'][$key]=$urlData;
 				}else{
 					$this->parameterRoutes[$url.'{'.$method.'}']=$this->getRouteData($parameters,$method);
 					$this->parameterRoutes[$url.'{'.$method.'}']['parameters']=[$key=>$urlData];
 				}
+				$i++;
 			}
 		}
 	}
