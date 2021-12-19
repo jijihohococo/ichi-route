@@ -13,6 +13,9 @@ class RouteMiddleware{
 			if(isset($middlewareData[0])){
 				$class=$middlewareData[0];
 				$middlewareClassString=strpos($class, 'JiJiHoHoCoCo\IchiRoute\Middleware')!==FALSE ? $class : $route->getBaseMiddlewarePath().$class;
+				if(!class_exists($middlewareClassString)){
+					throw new \Exception($middlewareClassString . " Middleware Class is not exist", 1);
+				}
 				$middlewareClass=new $middlewareClassString;
 				if(!$middlewareClass instanceof MainMiddleware){
 					throw new \Exception("Your ".$middlewareClassString." need to extend JiJiHoHoCoCo\IchiRoute\Middleware\MainMiddleware", 1);
