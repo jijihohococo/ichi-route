@@ -32,11 +32,7 @@ class Route{
 	}
 
 	private function getCurrentDomain(){
-		$currentDomain=$this->currentDomain==NULL ? $this->host->getDefaultDomain() : $this->currentDomain;
-		if($this->usedMultipleDomains==TRUE && $currentDomain=='localhost'){
-			throw new \Exception("You need to change your default domain name", 1);
-		}
-		return $currentDomain;
+		return $this->currentDomain==NULL ? $this->host->getDefaultDomain() : $this->currentDomain;
 	}
 
 	private function getServerHost(){
@@ -280,6 +276,9 @@ private function checkMiddleware($routes,$serverURL,$parameters=[]){
 }
 
 public function domain(string $domain,callable $function){
+	if($this->host->getDefaultDomain()=='localhost'){
+		throw new \Exception('You need to set your default domain name', 1);
+	}
 	$this->usedMultipleDomains=TRUE;
 	if(strpos($domain,'{')!==FALSE && strpos($domain,'}')!==FALSE ){
 		foreach(explode('.',$domain) as $key => $domainData ){
