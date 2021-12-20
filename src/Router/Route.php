@@ -19,9 +19,8 @@ class Route{
 
 	private $redis , $redisCachedTime , $memcached , $memcachedCachedTime , $pdo , $pdoCachedTime , $cacheMode ;
 
-	private $host , $currentDomain , $domains , $defaultHost;
+	private $host , $currentDomain , $domains , $defaultHost , $parameterDomains;
 	private $usedMultipleDomains=FALSE;
-
 	public function __construct(){
 		$this->dependencyInject=new DependencyInject;
 		$this->routeMiddleware=new RouteMiddleware;
@@ -145,7 +144,7 @@ class Route{
 	
 	private function addRoute($parameters,$method){
 		$url=getRoute($parameters[0]);
-		if(strpos($url,'{')==TRUE && strpos($url,'}')==TRUE ){
+		if(strpos($url,'{')!==FALSE && strpos($url,'}')!==FALSE ){
 			$this->addParameterRoutes($url,$parameters,$method);
 		}else{
 			// if(isset($this->routes[$url.'{'.$method.'}'])){
@@ -282,6 +281,22 @@ private function checkMiddleware($routes,$serverURL,$parameters=[]){
 
 public function domain(string $domain,callable $function){
 	$this->usedMultipleDomains=TRUE;
+	if(strpos($domain,'{')!==FALSE && strpos($domain,'}')!==FALSE ){
+		foreach(explode('.',$domain) as $key => $domainData ){
+			if(substr($domainData,0,1)=='{' && substr($domainData,-1)=='}'){
+				if(isset($this->parameterDomains[$domain]) &&
+					isset($this->parameterDomains[$domain]['parameters']) ){
+					if($i==0){
+						throw new \Exception($domain . " is duplicated" , 1);
+					}
+					$this->parameterDomains[$domain]['parameters'][$key]=$domainData;
+				}else{
+					$this->parameterDomains[$domain]['parameters']=[$key=>$domainData];
+				}
+				$i++;
+			}
+		}
+	}
 	$this->currentDomain=$domain;
 	$function->call($this);
 	$this->currentDomain=NULL;
@@ -373,8 +388,7 @@ private function getRouteFromCache($host,$newServerURL){
 	return $reflectionMethod->invokeArgs($this,$parameters);
 }
 
-public function run(){
-	$serverHost=$this->getServerHost();
+private function runDomain($domain){
 
 	$serverURL=parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
 	$method=$_SERVER['REQUEST_METHOD'];
@@ -387,94 +401,122 @@ public function run(){
 	$memcached=$this->getMemcached();
 	$pdo=$this->getPDO();
 
+	if($this->defaultMiddlewares!==NULL){
+		$this->routeMiddleware->check($this->defaultMiddlewares,$this);
+	}
+			// FOR CACHED ROUTES //
+	if($this->cacheMode!==NULL && isset($domain['parameterRoutes']) ){
+
+		$cacheObject=${$this->cacheMode};
+		$newServerURL=getCachedRoute($cacheObject,$serverURL,$requestMethod);
+
+		if($newServerURL!==NULL){
+			if(isset($domain['parameterRoutes'][$newServerURL])){
+				return $this->getRouteFromCache($domain['parameterRoutes'],$newServerURL);
+			}else{
+				$cacheObject->delete($serverURL.$requestMethod);
+			}
+		}
+	}
+			// FOR CACHED ROUTES //
+
+			// FOR SPECFIC ROUTES //
+	if(isset($domain['routes'])){
+		$routes=$domain['routes'];
+		if($this->serverURLCheckOne($serverURL,$requestMethod,$routes,$method)){
+			$this->checkMiddleware($routes,$serverURL.$requestMethod);
+			return $this->callingRequest($routes[$serverURL.$requestMethod]['function']);
+
+		}
+		if($this->serverURLCheckTwo($serverURL,$requestMethod,$routes,$method)){
+			$this->checkMiddleware($routes,$serverURL.'/'.$requestMethod);
+			return $this->callingRequest($routes[$serverURL.'/'.$requestMethod]['function']);
+		}
+		if($this->serverURLCheckThree($serverURL,$requestMethod,$routes,$method)){
+			$this->checkMiddleware($routes,substr($serverURL,0,-1).$requestMethod);
+			return $this->callingRequest($routes[substr($serverURL,0,-1).$requestMethod]['function']);
+		}
+	}
+			// FOR SPECFIC ROUTES //
+
+			// FOR PARAMETER ROUTES //
+	if(isset($domain['parameterRoutes'])){
+		$url=$urlData=getDirectURL();
+		$availableParameterRoute=null;
+		foreach($domain['parameterRoutes'] as $urlKey=> $route){
+			$parameters=[];
+			$requestURL=getDirectURL(str_replace($requestMethod, '', $urlKey));
+			if(count($requestURL)==count($urlData) && $method==$route['method']){
+				$middlewareParameters=[];
+				$parameterRoute=$route['parameters']; 
+				foreach($parameterRoute as $parameterKey => $parameter){
+					$parameters[$parameterKey]=$url[$parameterKey];
+					$url[$parameterKey]=$parameter;
+					$newValue=getRouteParameter($parameter);
+					$middlewareParameters[$newValue]=$parameters[$parameterKey];
+				}
+				$newServerURL=substr(implode('/',$url),0,-1).$requestMethod;
+				if(isset($domain['parameterRoutes'][$newServerURL])){
+
+					if($this->cacheMode!==NULL){
+						$saveRoute=substr(implode('/',$urlData),0,-1).$requestMethod;
+						${$this->cacheMode}->set($saveRoute,$newServerURL,$this->{$this->cacheMode.'CachedTime'} );
+					}
+
+
+					$availableParameterRoute=$domain['parameterRoutes'][$newServerURL];
+
+					$this->checkMiddleware($domain['parameterRoutes'],$newServerURL,$middlewareParameters);
+					$parameters[0]=$availableParameterRoute['function'];
+					ksort($parameters);
+
+					$reflectionMethod=new ReflectionMethod((string)get_class($this),'callingRequest');
+					$reflectionMethod->setAccessible(true);
+					return $reflectionMethod->invokeArgs($this,$parameters);
+
+				}else{
+					$url=$urlData;
+				}
+
+			}
+		}
+	}
+	return $this->showErrorPage();
+			// FOR PARAMETER ROUTES //
+}
+
+public function run(){
+	$serverHost=$this->getServerHost();
+
 	// INCLUDING DOMAIN CHECKING //
 	if(is_array($this->domains)){
 		// FOR SPECFIC DOMAIN //
 		if(isset($this->domains[$serverHost])){
-			$domain=$this->domains[$serverHost];
-			if($this->defaultMiddlewares!==NULL){
-				$this->routeMiddleware->check($this->defaultMiddlewares,$this);
-			}
-			// FOR CACHED ROUTES //
-			if($this->cacheMode!==NULL && isset($domain['parameterRoutes']) ){
-
-				$cacheObject=${$this->cacheMode};
-				$newServerURL=getCachedRoute($cacheObject,$serverURL,$requestMethod);
-
-				if($newServerURL!==NULL){
-					if(isset($domain['parameterRoutes'][$newServerURL])){
-						return $this->getRouteFromCache($domain['parameterRoutes'],$newServerURL);
-					}else{
-						$cacheObject->delete($serverURL.$requestMethod);
-					}
-				}
-			}
-			// FOR CACHED ROUTES //
-
-			// FOR SPECFIC ROUTES //
-			if(isset($domain['routes'])){
-				$routes=$domain['routes'];
-				if($this->serverURLCheckOne($serverURL,$requestMethod,$routes,$method)){
-					$this->checkMiddleware($routes,$serverURL.$requestMethod);
-					return $this->callingRequest($routes[$serverURL.$requestMethod]['function']);
-
-				}
-				if($this->serverURLCheckTwo($serverURL,$requestMethod,$routes,$method)){
-					$this->checkMiddleware($routes,$serverURL.'/'.$requestMethod);
-					return $this->callingRequest($routes[$serverURL.'/'.$requestMethod]['function']);
-				}
-				if($this->serverURLCheckThree($serverURL,$requestMethod,$routes,$method)){
-					$this->checkMiddleware($routes,substr($serverURL,0,-1).$requestMethod);
-					return $this->callingRequest($routes[substr($serverURL,0,-1).$requestMethod]['function']);
-				}
-			}
-			// FOR SPECFIC ROUTES //
-
-			// FOR PARAMETER ROUTES //
-			if(isset($domain['parameterRoutes'])){
-				$url=$urlData=getDirectURL();
-				$availableParameterRoute=null;
-				foreach($domain['parameterRoutes'] as $urlKey=> $route){
-					$parameters=[];
-					$requestURL=getDirectURL(str_replace($requestMethod, '', $urlKey));
-					if(count($requestURL)==count($urlData) && $method==$route['method']){
-						$middlewareParameters=[];
-						$parameterRoute=$route['parameters']; 
-						foreach($parameterRoute as $parameterKey => $parameter){
-							$parameters[$parameterKey]=$url[$parameterKey];
-							$url[$parameterKey]=$parameter;
-							$newValue=getRouteParameter($parameter);
-							$middlewareParameters[$newValue]=$parameters[$parameterKey];
-						}
-						$newServerURL=substr(implode('/',$url),0,-1).$requestMethod;
-						if(isset($domain['parameterRoutes'][$newServerURL])){
-
-							if($this->cacheMode!==NULL){
-								$saveRoute=substr(implode('/',$urlData),0,-1).$requestMethod;
-								${$this->cacheMode}->set($saveRoute,$newServerURL,$this->{$this->cacheMode.'CachedTime'} );
-							}
-
-
-							$availableParameterRoute=$domain['parameterRoutes'][$newServerURL];
-
-							$this->checkMiddleware($domain['parameterRoutes'],$newServerURL,$middlewareParameters);
-							$parameters[0]=$availableParameterRoute['function'];
-							ksort($parameters);
-
-							$reflectionMethod=new ReflectionMethod((string)get_class($this),'callingRequest');
-							$reflectionMethod->setAccessible(true);
-							return $reflectionMethod->invokeArgs($this,$parameters);
-
-						}else{
-							$url=$urlData;
-						}
-
-					}
-				}
-			}
-			// FOR PARAMETER ROUTES //
+			return $this->runDomain($this->domains[$serverHost]);
 		}
 		// FOR SPECFIC DOMAIN //
+
+		// FOR PARAMETER DOMAIN //
+		if(is_array($this->parameterDomains)){
+			foreach($this->parameterDomains as $domainKey => $domain){
+				$parameters=[];
+				$domainArray=explode('.', $domainKey);
+				$serverHostArray=$hostArray=explode('.',$serverHost);
+				if(count($domainArray)==count($hostArray)){
+					foreach($domain['parameters'] as $parameterKey => $parameter){
+						$parameters[$parameterKey]=$serverHostArray[$parameterKey];
+						$serverHostArray[$parameterKey]=$parameter;
+					}
+					$newDomain=implode('.',$serverHostArray);
+					if(isset($this->domains[$newDomain])){
+						return $this->runDomain($this->domains[$newDomain]);
+					}else{
+						$serverHostArray=$hostArray;
+					}
+				}
+			}
+		}
+		// FOR PARAMETER DOMAIN //
 	}
 	// INCLUDING DOMAIN CHECKING //
 	return $this->showErrorPage();
