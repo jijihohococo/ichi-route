@@ -272,6 +272,7 @@ public function domain(string $domain,callable $function){
 		throw new \Exception('You need to set your default domain name', 1);
 	}
 	$this->usedMultipleDomains=TRUE;
+	$i=0;
 	if(strpos($domain,'{')!==FALSE && strpos($domain,'}')!==FALSE ){
 		foreach(explode('.',$domain) as $key => $domainData ){
 			if(substr($domainData,0,1)=='{' && substr($domainData,-1)=='}'){
