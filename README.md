@@ -292,13 +292,123 @@ First parameter is domain name and second parameter is declared route under this
 
 If you want to use parameter in your subdomain
 
-Parameters are embrace with "
+Parameters are embrace with "{" and "}" as route parameters
+
+You must pass subdomain parameters into the closure function or class's function
+
+<i>Class's function</i>
 ```php
 
 $route->domain('{subdomain}.com',function(){
 	$this->get('items','Subdomain/ItemController@get');
 });
 ```
+
+```php
+
+namespace App\Controllers\Subdomain;
+
+class ItemController{
+
+	public function get($subdomain){
+
+	}
+}
+```
+
+<i>Closure function</i>
+```php
+
+$route->domain('{subdomain}.com',function(){
+	$this->get('items',function($subdomain){
+
+	});
+})
+```
+
+<b>If you want to use multiple subdomain parameters, use '.' between parameters and string</b>
+
+<i>Class's function</i>
+```php
+
+$route->domain('{subdomain}.{person}.com',function(){
+	$this->get('items','Subdomain/ItemController@get');
+});
+```
+
+```php
+
+namespace App\Controllers\Subdomain;
+
+class ItemController{
+
+	public function get($subdomain,$person){
+
+	}
+}
+```
+
+<i>Closure function</i>
+```php
+
+$route->domain('{subdomain}.{person}.com',function(){
+	$this->get('items',function($subdomain,$person){
+
+	});
+});
+
+```
+
+<b>If you want to use route parameters in subdomain parameters, You must pass subdomain parameters and also route parameters in your class's function or closure function</b>
+
+
+<i>Class's function</i>
+```php
+
+$route->domain('{subdomain}.{person}.com',function(){
+	$this->get('items/{id}','Subdomain/ItemController@get');
+});
+```
+
+```php
+
+namespace App\Controllers\Subdomain;
+
+class ItemController{
+
+	public function get($subdomain,$person,$id){
+
+	}
+}
+```
+
+<i>Closure function</i>
+```php
+$route->domain('{subdomain}.{person}.com',function(){
+	$this->get('items/{id}',function($subdomain,$person,$id){
+
+	});
+});
+```
+
+If you want to get subdomain parameters in your middleware which are under that subdomain routes
+
+In your middleware class
+```php
+
+namespace App\Middlewares;
+
+use JiJiHoHoCoCo\IchiRoute\Middleware\MainMiddleware;
+
+class TestMiddleware extends MainMiddleware{
+
+	public function handle(){
+		$subdomainParameters=$this->getDomainParameters();
+	}
+}
+```
+
+<b>You can't pass subdomain parameters into your middleware like you can do with your route parameters</b>
 
 ## Dependency Injection
 
