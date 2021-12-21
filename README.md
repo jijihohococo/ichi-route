@@ -11,12 +11,12 @@ This package is Open Source According to [MIT license](LICENSE.md)
 * [Installation](#installation)
 * [Single Route](#single-route)
 * [Using Routes](#using-routes)
-* [Paramter Route](#parameter-route)
-* [Subdomain Route](#subdomain-route)
-	* [Single Subdomain](#single-subdomain)
-	* [Dynamic Subdomain](#dynamic-subdomain)
+* [Route Parameter](#route-parameter)
 * [Resource Route](#resource-route)
 * [Prefix Route](#prefix-route)
+* [Subdomain Route](#subdomain-route)
+	* [Single Subdomain](#single-subdomain)
+	* [Subdomain Parameter](#subdomain-parameter)
 * [Dependency Injection](#dependency-injection)
 * [Middleware](#middleware)
 * [CSRF Token Authentication](#csrf-token-authentication)
@@ -106,9 +106,9 @@ Calling routes in frontend
 
 ```
 
-## Parameter Route
+## Route Parameter
 
-In many cases, you have a time to make parameter route
+In many cases, you have a time to make route parameters
 
 ```php
 
@@ -248,9 +248,57 @@ So the below url are able to use
 
 ```
 
-You can add the single routes and parameter routes in the group closure function.
+You can add the routes in the group closure function.
 
 <b>Don't include '/' in declaring "url_group"</b>
+
+## Subdomain Route
+
+You must set your main domain name before declaring routes if you want to use subdomains.
+
+```php
+use JiJiHoHoCoCo\IchiRoute\Router\Route;
+
+$route=new Route;
+$route->setDefaultDomain('your_main_domain.com');
+
+```
+### Single Subdomain
+
+You can set your subdomain routes with <b>"domain()"</b> function
+
+You can use all route functions within "domain()" function
+
+<b>You can't use domain function within group function</b>
+
+```php
+
+$route->domain('your_subdomain.com',function(){
+	$this->get('items','Subdomain/ItemController@get');
+});
+
+```
+
+If you want to show your subdomain route, use getSubdomainRoute function.
+First parameter is domain name and second parameter is declared route under this subdomain.
+
+```html
+
+<a href="<?php echo getSubdomainRoute('your_subdomain.com','items'); ?>" >Subdomain Items</a>
+```
+
+
+### Subdomain Parameter
+
+If you want to use parameter in your subdomain
+
+Parameters are embrace with "
+```php
+
+$route->domain('{subdomain}.com',function(){
+	$this->get('items','Subdomain/ItemController@get');
+});
+```
 
 ## Dependency Injection
 
@@ -340,7 +388,7 @@ $route->get('order','App\Controllers\OrderController@order',[
 ```
 Those middlewares will be loaded sequently because of using "next()" function in each "handle()" function.
 
-You can add parameters in middleware with your parameter routes
+You can add parameters in middleware with your route parameters
 
 ```php
 
@@ -367,7 +415,7 @@ class CheckItemMiddleware extends MainMiddleware{
 }
 ```
 
-You can add multiple parameters in middleware with your parameter routes
+You can add multiple parameters in middleware with your route parameters
 
 ```php
 

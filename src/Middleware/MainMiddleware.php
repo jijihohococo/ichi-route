@@ -8,6 +8,7 @@ abstract class MainMiddleware{
 	public $next;
 
 	public $parameters=[];
+	public $domainParameters=[];
 
 	public function setNext(MainMiddleware $next){
 		$this->next=$next;
@@ -16,6 +17,14 @@ abstract class MainMiddleware{
 
 	public function setParameters(array $parameters){
 		$this->parameters=$parameters;
+	}
+
+	public function setDomainParameters($domainParameters){
+		$this->domainParameters=$domainParameters;
+	}
+
+	protected function getDomainParameters(){
+		return $this->domainParameters;
 	}
 
 	public function getParameters(){

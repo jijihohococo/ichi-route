@@ -4,6 +4,15 @@ namespace JiJiHoHoCoCo\IchiRoute\Middleware;
 use ReflectionMethod;
 class RouteMiddleware{
 
+	private $domainParameters;
+
+	public function setDomainParameters($domainParameters){
+		$this->domainParameters=$domainParameters;
+	}
+
+	private function getDomainParameters(){
+		return $this->domainParameters;
+	}
 	
 	public function check($middlewares=[],$route,$parameters=[]){
 		$middlewares=array_unique($middlewares);
@@ -31,6 +40,10 @@ class RouteMiddleware{
 						}
 					}
 					$middlewareClass->setParameters($middlewareParameters);
+					$domainParameters=$this->getDomainParameters();
+					if($domainParameters!==NULL){
+						$middlewareClass->setDomainParameters($domainParameters);
+					}
 				}
 				$middlewareObjects[]=$middlewareClass;
 				if($key>0){

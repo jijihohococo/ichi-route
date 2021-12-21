@@ -80,3 +80,10 @@ if(!function_exists('addFolderSlash')){
 		return substr($path,0,-1)!=='\\'?$path.'\\':$path;
 	}
 }
+
+if(!function_exists('getSubdomainRoute')){
+	function getSubdomainRoute(string $domain,string $link){
+		$http=!empty($_SERVER['HTTPS']) ? 'https://' : 'http://' ;
+		return $http . $domain . '/' . $link;
+	}
+}
