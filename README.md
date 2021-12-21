@@ -12,6 +12,9 @@ This package is Open Source According to [MIT license](LICENSE.md)
 * [Single Route](#single-route)
 * [Using Routes](#using-routes)
 * [Paramter Route](#parameter-route)
+* [Subdomain Route](#subdomain-route)
+	* [Single Subdomain](#single-subdomain)
+	* [Dynamic Subdomain](#dynamic-subdomain)
 * [Resource Route](#resource-route)
 * [Prefix Route](#prefix-route)
 * [Dependency Injection](#dependency-injection)
@@ -542,7 +545,7 @@ CORS::setMaxAge(3600);
 ```
 ## Caching Route
 
-You can cache route with
+You can cache parameter routes with
 1. Database
 2. Redis
 3. Memcached

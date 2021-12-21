@@ -10,8 +10,8 @@ use JiJiHoHoCoCo\IchiRoute\Setting\Host;
 use ReflectionMethod,PDO,ReflectionFunction;
 class Route{
 
-	private $routes,$groupURL,$parameterRoutes=[];
-	private $currentGroup,$urlParameters;
+	private $groupURL=[];
+	private $currentGroup;
 	private $numberOfGroups=0;
 	private $baseControllerPath,$baseMiddlewarePath;
 
@@ -19,7 +19,7 @@ class Route{
 
 	private $redis , $redisCachedTime , $memcached , $memcachedCachedTime , $pdo , $pdoCachedTime , $cacheMode ;
 
-	private $host , $currentDomain , $domains , $defaultHost , $parameterDomains;
+	private $host , $currentDomain , $domains , $parameterDomains;
 	private $usedMultipleDomains=FALSE;
 	public function __construct(){
 		$this->dependencyInject=new DependencyInject;
@@ -143,10 +143,6 @@ class Route{
 		if(strpos($url,'{')!==FALSE && strpos($url,'}')!==FALSE ){
 			$this->addParameterRoutes($url,$parameters,$method);
 		}else{
-			// if(isset($this->routes[$url.'{'.$method.'}'])){
-			// 	throw new \Exception($url." is duplicated", 1);
-			// }
-			// $this->routes[$url.'{'.$method.'}']=$this->getRouteData($parameters,$method);
 			$currentDomain=$this->getCurrentDomain();
 			if(isset($this->domains[$currentDomain]['routes']) &&
 				isset($this->domains[$currentDomain]['routes'][$url.'{'.$method.'}']) ){
@@ -161,17 +157,13 @@ private function addParameterRoutes($url,$parameters,$method){
 	$currentDomain=$this->getCurrentDomain();
 	foreach(explode('/',$url) as $key => $urlData ){
 		if(substr($urlData,0,1)=='{' && substr($urlData,-1)=='}'){
-				//if(isset($this->parameterRoutes[$url.'{'.$method.'}'])){
 			if(isset($this->domains[$currentDomain]['parameterRoutes']) &&
 				isset($this->domains[$currentDomain]['parameterRoutes'][$url.'{'.$method.'}']) ){
 				if($i==0){
 					throw new \Exception($url . " is duplicated" , 1);
 				}
-					// $this->parameterRoutes[$url.'{'.$method.'}']['parameters'][$key]=$urlData;
 				$this->domains[$currentDomain]['parameterRoutes'][$url.'{'.$method.'}']['parameters'][$key]=$urlData;
 			}else{
-					// $this->parameterRoutes[$url.'{'.$method.'}']=$this->getRouteData($parameters,$method);
-					// $this->parameterRoutes[$url.'{'.$method.'}']['parameters']=[$key=>$urlData];
 
 
 				$this->domains[$currentDomain]['parameterRoutes'][$url.'{'.$method.'}']=$this->getRouteData($parameters,$method);
@@ -267,15 +259,15 @@ public function any(string $route,$return,array $middlewares=[]){
 
 private function checkMiddleware($routes,$serverURL,$parameters=[]){
 
-	// if($this->{$routes}[$serverURL]['middleware']!==NULL && !empty($this->{$routes}[$serverURL]['middleware']) ){
-	// 	return $this->routeMiddleware->check($this->{$routes}[$serverURL]['middleware'],$this,$parameters);
-	// }
 	if($routes[$serverURL]['middleware']!==NULL && !empty($routes[$serverURL]['middleware']) ){
 		return $this->routeMiddleware->check($routes[$serverURL]['middleware'],$this,$parameters);
 	}
 }
 
 public function domain(string $domain,callable $function){
+	if($this->currentGroup!==NULL){
+		throw new \Exception("Don't use domain function within group function", 1);
+	}
 	if($this->host->getDefaultDomain()=='localhost'){
 		throw new \Exception('You need to set your default domain name', 1);
 	}
