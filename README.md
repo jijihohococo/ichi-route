@@ -479,7 +479,7 @@ use JiJiHoHoCoCo\IchiRoute\Middleware\MainMiddleware;
 class OrderMiddleware extends MainMiddleware{
 
 	public function handle(){
-		//--your business login--//
+		//--check your business logic--//
 		return $this->next();
 	}
 }
@@ -518,7 +518,7 @@ use JiJiHoHoCoCo\IchiRoute\Middleware\MainMiddleware;
 class CheckItemMiddleware extends MainMiddleware{
 
 	public function handle($id){
-		//--your business login--//
+		//--check your business logic--//
 		return $this->next();
 	}
 
@@ -545,7 +545,7 @@ use JiJiHoHoCoCo\IchiRoute\Middleware\MainMiddleware;
 class CheckItemMiddleware extends MainMiddleware{
 
 	public function handle($id,$stock){
-		//--your business login--//
+		//--check your business logic--//
 		return $this->next();
 	}
 
