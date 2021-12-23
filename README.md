@@ -9,6 +9,9 @@ This package is Open Source According to [MIT license](LICENSE.md)
 ## Table Of Content
 
 * [Installation](#installation)
+* [Setting](#setting)
+	* [Apache](#apache)
+	* [Nginx](#nginx)
 * [Single Route](#single-route)
 * [Using Routes](#using-routes)
 * [Route Parameter](#route-parameter)
@@ -33,6 +36,41 @@ This package is Open Source According to [MIT license](LICENSE.md)
 ```php
 
 composer require jijihohococo/ichi-route:dev-master
+
+```
+
+## Setting
+
+You must create following htaccess file before setting route according to your server.
+
+### Apache
+
+Create .htaccess file in your based folder
+
+```htaccess
+
+RewriteEngine On
+
+RewriteCond %{REQUEST_URI} (.+)/$
+RewriteRule ^ %1 [L,R=301]
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^ index.php [L]
+
+```
+
+### Nginx
+
+Create .htacess file in your based folder
+
+```htaccess
+
+rewrite ^/(.*)/$ /$1 redirect;
+
+if (!-e $request_filename){
+	rewrite ^(.*)$ /index.php break;
+}
 
 ```
 
