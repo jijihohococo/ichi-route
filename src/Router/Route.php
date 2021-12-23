@@ -496,6 +496,10 @@ private function runDomain($domain,array $domainParameters=[]){
 }
 
 public function run(){
+
+	header("X-XSS-Protection: 1; mode=block");
+	header('X-Content-Type-Options: nosniff');
+
 	$serverHost=$this->getServerHost();
 
 	// INCLUDING DOMAIN CHECKING //
