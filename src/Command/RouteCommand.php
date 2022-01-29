@@ -69,14 +69,22 @@ class ".$createdFile." extends MainMiddleware{
 
 	private function alreadyHave(string $createdFile,string $createdOption){
 		echo $createdFile . " ".$createdOption." is already created".PHP_EOL;
+		exit();
 	}
 
 	private function success(string $createdFile,string $createdOption){
 		echo $createdFile . " ".$createdOption." is created successfully".PHP_EOL;
+		exit();
 	}
 
 	private function wrongCommand(){
 		echo "You type wrong command".PHP_EOL;
+		exit();
+	}
+
+	private function createError(string $createdFile,string $createdOption){
+		echo "You can't create ". $createdFile . " " . $createdOption.PHP_EOL;
+		exit();
 	}
 
 	public function run(string $dir,array $argv){
@@ -138,11 +146,11 @@ class ".$createdFile." extends MainMiddleware{
 						return $this->success($createdFile,$createdOption);
 				}
 			} catch (Exception $e) {
-				echo "You can't create ". $createdFile . " " . $createdOption.PHP_EOL;
+
+				return $this->createError($createdFile,$createdOption);
+
 			}
 
-		}else{
-			return $this->wrongCommand();
 		}
 	}
 
