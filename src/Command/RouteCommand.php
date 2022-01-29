@@ -81,7 +81,7 @@ class ".$createdFile." extends MainMiddleware{
 
 	public function run(string $dir,array $argv){
 
-		if(count($argv)==3 && ($argv[1]==$this->modelCommandLine || $argv[1]==$this->observerCommandLine || $argv[1]==$this->resourceCommandLine  ) ){
+		if(count($argv)==3 && $argv[1]==$this->middlewareCommandLine ){
 			$command=$argv[1];
 			$createdOption=$this->checkOption($command);
 			$defaulFolder=$this->checkPath($command);
