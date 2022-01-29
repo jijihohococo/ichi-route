@@ -5,10 +5,13 @@ namespace JiJiHoHoCoCo\IchiRoute\Command;
 class RouteCommand{
 
 	private $middlewarePath='app/Middlewares';
+	private $controllerPath='app/Controllers';
 
-	
 
 	private $middlewareCommandLine='make:middleware';
+	private $controllerCommandLine='make:controller';
+
+	private $resourceController=FALSE;
 
 	public function setMiddlewarePath(string $middlewarePath){
 		$this->middlewarePath=$middlewarePath;
@@ -18,9 +21,91 @@ class RouteCommand{
 		return $this->middlewarePath;
 	}
 
+	public function setControllerPath(string $controllerPath){
+		$this->controllerPath=$controllerPath;
+	}
+
+	public function getControllerPath(){
+		return $this->controllerPath;
+	}
+
 	private function getNamespace(string $defaulFolder){
 		return str_replace('/', '\\', ucfirst($defaulFolder));
 	}
+
+	private function makeControllerContent(string $defaulFolder,string $createdFile){
+		return "<?php 
+
+namespace ".$this->getNamespace( $defaulFolder ).";
+
+
+class ".$createdFile."{
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}";
+	}
+
+
+	private function makeResourceControllerContent(string $defaulFolder,string $createdFile){
+		$variable='$id';
+		return  "<?php
+
+namespace ".$this->getNamespace( $defaulFolder ).";
+
+
+class ".$createdFile."{
+
+
+	public function index(){
+
+
+	}
+
+
+
+	public function create(){
+
+
+	}
+
+
+	public function edit(".$variable."){
+
+
+	}
+
+
+	public function update(".$variable."){
+
+
+	}
+
+
+	public function destroy(".$variable."){
+
+
+	}
+
+
+
+}";
+
+}
 
 	private function makeMiddlewareContent(string $defaulFolder,string $createdFile){
 		return "<?php
@@ -45,6 +130,9 @@ class ".$createdFile." extends MainMiddleware{
 			return 'Middleware';
 			break;
 			
+			case $this->controllerCommandLine:
+			return 'Controller';
+			break;			
 			
 		}
 	}
@@ -55,6 +143,10 @@ class ".$createdFile." extends MainMiddleware{
 			return $this->getMiddlewarePath();
 			break;
 			
+
+			case $this->controllerCommandLine:
+			return $this->getControllerPath();
+			break;
 		}
 	}
 
@@ -64,6 +156,10 @@ class ".$createdFile." extends MainMiddleware{
 			return $this->makeMiddlewareContent($defaulFolder,$createdFile);
 			break;
 			
+			case $this->controllerCommandLine:
+			return $this->resourceController==TRUE ? $this->makeResourceControllerContent($defaulFolder,$createdFile) : 
+			$this->makeControllerContent($defaulFolder,$createdFile);
+			break;
 		}
 	}
 
@@ -89,7 +185,10 @@ class ".$createdFile." extends MainMiddleware{
 
 	public function run(string $dir,array $argv){
 
-		if(count($argv)==3 && $argv[1]==$this->middlewareCommandLine ){
+		if(count($argv)==3 && ($argv[1]==$this->middlewareCommandLine || $argv[1]==$this->controllerCommandLine ) ){
+			if(isset($argv[3]) && $argv[3]=='--resource' ){
+				$this->resourceController=TRUE;
+			}
 			$command=$argv[1];
 			$createdOption=$this->checkOption($command);
 			$defaulFolder=$this->checkPath($command);

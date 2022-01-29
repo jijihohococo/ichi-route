@@ -226,7 +226,7 @@ class ItemController{
 
 	// POST METHOD //
 	// 'items/create' //
-	public function create(){
+	public function save(){
 
 	}
 
