@@ -185,7 +185,7 @@ class ".$createdFile." extends MainMiddleware{
 
 	public function run(string $dir,array $argv){
 
-		if(count($argv)==3 && ($argv[1]==$this->middlewareCommandLine || $argv[1]==$this->controllerCommandLine ) ){
+		if((count($argv)==3 || count($argv)==4) && ($argv[1]==$this->middlewareCommandLine || $argv[1]==$this->controllerCommandLine ) ){
 			if(isset($argv[3]) && $argv[3]=='--resource' ){
 				$this->resourceController=TRUE;
 			}
