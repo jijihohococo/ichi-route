@@ -108,7 +108,7 @@ class ".$createdFile."{
 }
 
 	private function makeMiddlewareContent(string $defaulFolder,string $createdFile){
-		$next='$this->next()';
+		$next='$this->next();';
 		return "<?php
 
 namespace ". $this->getNamespace( $defaulFolder ).";
