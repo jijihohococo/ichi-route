@@ -12,6 +12,7 @@ This package is Open Source According to [MIT license](LICENSE.md)
 * [Setting](#setting)
 	* [Apache](#apache)
 	* [Nginx](#nginx)
+* [Creating Controller](#creating-controller)
 * [Single Route](#single-route)
 * [Using Routes](#using-routes)
 * [Route Parameter](#route-parameter)
@@ -71,6 +72,44 @@ rewrite ^/(.*)/$ /$1 redirect;
 if (!-e $request_filename){
 	rewrite ^(.*)$ /index.php break;
 }
+
+```
+
+## Creating Controller
+
+You must create the controller for your routes.
+
+Firstly you need to created the file named "ichi" under your project folder and use the below code in this file
+
+```php
+#!/usr/bin/env php
+<?php
+
+require __DIR__.'/vendor/autoload.php';
+
+use JiJiHoHoCoCo\IchiRoute\Command\RouteCommand;
+
+
+$routeCommand=new RouteCommand;
+$routeCommand->run(__DIR__,$argv);
+
+```
+
+And then you can create the controller in your commandline
+
+```php
+
+php ichi make:controller ItemController
+
+```
+
+The default file folder is "app/Controllers". So after making command, the model you created will be in the this default file folder. If you want to change the default folder path, you can change it in your "ichi" file.
+
+```php
+
+$routeCommand=new RouteCommand;
+$routeCommand->setPath('new_app/Controllers');
+$routeCommand->run(__DIR__,$argv);
 
 ```
 
@@ -168,6 +207,9 @@ class ItemController{
 }
 
 ```
+
+
+
 You can also do with closure function
 
 ```php
@@ -250,6 +292,14 @@ class ItemController{
 
 
 }
+```
+
+You can also create the resource controller in terminal after making according to the insturctions from [Creating Controller](#creating-controller)
+
+```php
+
+php ichi make:controller ItemController --resource
+
 ```
 
 After running route function, the routes (URL) are able to run
@@ -523,6 +573,24 @@ class OrderMiddleware extends MainMiddleware{
 }
 ```
 You must extend <b>JiJiHoHoCoCo\IchiRoute\Middleware\MainMiddleware</b> and add "handle()" function. In your "handle" function, you must always return "next()" function. You can check your business transactions in this "handle" function.
+
+You can create the middleware via terminal after creating "ichi" file as we mentioned in [Creating Controller](#creating-controller)
+
+```php
+
+php ichi make:middleware OrderMiddleware
+
+```
+
+The default path for observer is "app/Middlewares". You can also change this in "ichi" file.
+
+```php
+
+$routeCommand=new RouteCommand;
+$routeCommand->setResourcePath('new_app/Middlewares');
+$routeCommand->run(__DIR__,$argv);
+
+```
 
 You can add multiple middleware classes
 
