@@ -2,6 +2,7 @@
 
 namespace JiJiHoHoCoCo\IchiRoute\Command;
 
+use Exception;
 class RouteCommand{
 
 	private $middlewarePath='app/Middlewares';
