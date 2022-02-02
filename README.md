@@ -36,7 +36,7 @@ This package is Open Source According to [MIT license](LICENSE.md)
 
 ```php
 
-composer require jijihohococo/ichi-route:dev-master
+composer require jijihohococo/ichi-route
 
 ```
 
