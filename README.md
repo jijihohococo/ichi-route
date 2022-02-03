@@ -103,7 +103,7 @@ php ichi make:controller ItemController
 
 ```
 
-The default file folder is "app/Controllers". So after making command, the model you created will be in the this default file folder. If you want to change the default folder path, you can change it in your "ichi" file.
+The default file folder is "app/Controllers". So after making command, the controller you created will be in the this default file folder. If you want to change the default folder path, you can change it in your "ichi" file.
 
 ```php
 
