@@ -370,7 +370,11 @@ private function getRouteFromCache($host,$newServerURL,$domainParameters=[]){
 		$newValue=getRouteParameter($parameter);
 		$middlewareParameters[$newValue]=$url[$key];
 	}
-	$this->checkMiddleware($host,$newServerURL,$middlewareParameters);
+	$check=$this->checkMiddleware($host,$newServerURL,$middlewareParameters);
+
+	if($check!==NULL){
+		return $check;
+	}
 
 	return $this->domainParameterRouteRun($domainParameters,$parameters,$availableParameterRoute['function']);
 }
@@ -431,21 +435,30 @@ private function runDomain($domain,array $domainParameters=[]){
 	if(isset($domain['routes'])){
 		$routes=$domain['routes'];
 		if($this->serverURLCheckOne($serverURL,$requestMethod,$routes,$method)){
-			$this->checkMiddleware($routes,$serverURL.$requestMethod);
+			$check=$this->checkMiddleware($routes,$serverURL.$requestMethod);
+			if($check!==NULL){
+				return $check;
+			}
 			$parameters[0]=$routes[$serverURL.$requestMethod]['function'];
 			$newParameters=array_merge($parameters,$domainParameters);
 			return $this->mainRun($newParameters);
 		}
 
 		if($this->serverURLCheckTwo($serverURL,$requestMethod,$routes,$method)){
-			$this->checkMiddleware($routes,$serverURL.'/'.$requestMethod);
+			$check=$this->checkMiddleware($routes,$serverURL.'/'.$requestMethod);
+			if($check!==NULL){
+				return $check;
+			}
 			$parameters[0]=$routes[$serverURL.'/'.$requestMethod]['function'];
 			$newParameters=array_merge($parameters,$domainParameters);
 			return $this->mainRun($newParameters);
 		}
 
 		if($this->serverURLCheckThree($serverURL,$requestMethod,$routes,$method)){
-			$this->checkMiddleware($routes,substr($serverURL,0,-1).$requestMethod);
+			$check=$this->checkMiddleware($routes,substr($serverURL,0,-1).$requestMethod);
+			if($check!==NULL){
+				return $check;
+			}
 			$parameters[0]=$routes[substr($serverURL,0,-1).$requestMethod]['function'];
 			$newParameters=array_merge($parameters,$domainParameters);
 			return $this->mainRun($newParameters);
@@ -480,8 +493,11 @@ private function runDomain($domain,array $domainParameters=[]){
 
 					$availableParameterRoute=$domain['parameterRoutes'][$newServerURL];
 
-					$this->checkMiddleware($domain['parameterRoutes'],$newServerURL,$middlewareParameters);
+					$check=$this->checkMiddleware($domain['parameterRoutes'],$newServerURL,$middlewareParameters);
 
+					if($check!==NULL){
+						return $check;
+					}
 					return $this->domainParameterRouteRun($domainParameters,$parameters,$availableParameterRoute['function']);
 
 				}else{
