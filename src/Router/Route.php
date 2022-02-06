@@ -413,7 +413,10 @@ private function runDomain($domain,array $domainParameters=[]){
 	$pdo=$this->getPDO();
 	
 	if($this->defaultMiddlewares!==NULL){
-		$this->routeMiddleware->check($this->defaultMiddlewares,$this);
+		$check=$this->routeMiddleware->check($this->defaultMiddlewares,$this);
+		if($check!==NULL){
+			return $check;
+		}
 	}
 			// FOR CACHED ROUTES //
 	if($this->cacheMode!==NULL && isset($domain['parameterRoutes']) ){
