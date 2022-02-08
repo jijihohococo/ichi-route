@@ -84,6 +84,11 @@ class ".$createdFile."{
 
 	}
 
+	public function save(){
+		
+
+	}
+
 
 	public function edit(".$variable."){
 
