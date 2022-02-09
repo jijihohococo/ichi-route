@@ -2,7 +2,7 @@
 
 namespace JiJiHoHoCoCo\IchiRoute\Middleware;
 
-class PatchMethodMiddleware extends MethodMiddleware{
+class PatchMethodMiddleware extends MainMiddleware{
 	
 	use MethodMiddlewareTrait;
 

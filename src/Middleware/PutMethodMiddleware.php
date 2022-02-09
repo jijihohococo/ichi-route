@@ -2,7 +2,7 @@
 
 namespace JiJiHoHoCoCo\IchiRoute\Middleware;
 
-class PutMethodMiddleware extends MethodMiddleware{
+class PutMethodMiddleware extends MainMiddleware{
 	
 	use MethodMiddlewareTrait;
 

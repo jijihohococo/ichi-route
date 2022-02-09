@@ -2,7 +2,7 @@
 
 namespace JiJiHoHoCoCo\IchiRoute\Middleware;
 
-class DeleteMethodMiddleware extends MethodMiddleware{
+class DeleteMethodMiddleware extends MainMiddleware{
 	
 	use MethodMiddlewareTrait;
 
