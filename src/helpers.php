@@ -8,7 +8,8 @@ if(!function_exists('method')){
 
 if(!function_exists('old')){
 	function old($data,$default=null){
-		echo $default==null  && isset($_REQUEST[$data]) ? $_REQUEST[$data] : $default;
+
+		echo isset($_REQUEST[$data]) ? $_REQUEST[$data] : echo e($default);
 	}
 }
 
