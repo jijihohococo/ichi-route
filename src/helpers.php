@@ -1,6 +1,5 @@
 <?php
-i
-f(!function_exists('old')){
+if(!function_exists('old')){
 	function old($data,$default=null){
 		echo $default==null  && isset($_REQUEST[$data]) ? $_REQUEST[$data] : $default;
 	}
