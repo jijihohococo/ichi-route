@@ -1,4 +1,11 @@
 <?php
+
+if(!function_exists('method')){
+	function method(string $key){
+		echo '<input type="hidden" name="__method" value="'.$key.'">';
+	}
+}
+
 if(!function_exists('old')){
 	function old($data,$default=null){
 		echo $default==null  && isset($_REQUEST[$data]) ? $_REQUEST[$data] : $default;

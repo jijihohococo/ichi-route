@@ -221,15 +221,31 @@ public function post(string $route,$return,array $middlewares=[]){
 }
 
 public function put(string $route,$return,array $middlewares=[]){
-	return $this->makeRouteAction($route,$return,$middlewares,'PUT');
+	$newMiddlewares=$middlewares;
+	$newMiddlewares[]=[
+		'JiJiHoHoCoCo\IchiRoute\Middleware\MethodMiddleware:PUT'
+	];
+	return $this->makeRouteAction($route,$return,$newMiddlewares,'POST');
 }
 
 public function delete(string $route,$return,array $middlewares=[]){
-	return $this->makeRouteAction($route,$return,$middlewares,'DELETE');
+	$newMiddlewares=$middlewares;
+	$newMiddlewares[]=[
+		'JiJiHoHoCoCo\IchiRoute\Middleware\MethodMiddleware:DELETE'
+	];
+	return $this->makeRouteAction($route,$return,$newMiddlewares,'POST');
 }
 
 public function head(string $route,$return,array $middlewares=[]){
 	return $this->makeRouteAction($route,$return,$middlewares,'HEAD');
+}
+
+public function patch(string $route,$return,array $middlewares=[]){
+	$newMiddlewares=$middlewares;
+	$newMiddlewares[]=[
+		'JiJiHoHoCoCo\IchiRoute\Middleware\MethodMiddleware:PATCH'
+	];
+	return $this->makeRouteAction($route,$return,$newMiddlewares,'POST');
 }
 
 public function resource(string $route,$return,array $middlewares=[]){
@@ -237,11 +253,15 @@ public function resource(string $route,$return,array $middlewares=[]){
 		throw new \Exception("You can pass controller class with method or closure function", 1);
 	}
 	$route=getRoute($route);
+	$patchMiddlewares=$middlewares;
+	$patchMiddlewares[]=[
+		'JiJiHoHoCoCo\IchiRoute\Middleware\MethodMiddleware:PATCH'
+	];
 	$this->get($route,$return.'@index',$middlewares);
 	$this->get($route.'/create',$return.'@create',$middlewares);
 	$this->post($route.'/create',$return.'@save',$middlewares);
 	$this->get($route.'/{id}/edit',$return.'@edit',$middlewares);
-	$this->post($route.'/{id}/edit',$return.'@update',$middlewares);
+	$this->post($route.'/{id}/edit',$return.'@update',$patchMiddlewares);
 	$this->delete($route.'/{id}/delete',$return.'@destroy',$middlewares);
 }
 
