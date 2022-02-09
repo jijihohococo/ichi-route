@@ -960,3 +960,13 @@ You can show old request data after submitting in your php file
 <input type="text" name="test" value="<?php old('test'); ?>">
 
 ```
+
+If you want to set default data if the request is not isset
+
+```php
+
+old('test','Default Test');
+
+```
+
+<b>This function is aimed to use in create and update data forms.</b>
