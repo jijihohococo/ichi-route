@@ -1,4 +1,10 @@
 <?php
+i
+f(!function_exists('old')){
+	function old($data,$default=null){
+		echo $default==null  && isset($_REQUEST[$data]) ? $_REQUEST[$data] : $default;
+	}
+}
 
 if(!function_exists('generateCSRFToken')){
 	function generateCSRFToken(){
