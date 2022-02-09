@@ -241,7 +241,7 @@ public function resource(string $route,$return,array $middlewares=[]){
 	$this->get($route.'/create',$return.'@create',$middlewares);
 	$this->post($route.'/create',$return.'@save',$middlewares);
 	$this->get($route.'/{id}/edit',$return.'@edit',$middlewares);
-	$this->put($route.'/{id}/edit',$return.'@update',$middlewares);
+	$this->post($route.'/{id}/edit',$return.'@update',$middlewares);
 	$this->delete($route.'/{id}/delete',$return.'@destroy',$middlewares);
 }
 
