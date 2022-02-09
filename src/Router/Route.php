@@ -222,17 +222,13 @@ public function post(string $route,$return,array $middlewares=[]){
 
 public function put(string $route,$return,array $middlewares=[]){
 	$newMiddlewares=$middlewares;
-	$newMiddlewares[]=[
-		'JiJiHoHoCoCo\IchiRoute\Middleware\MethodMiddleware:PUT'
-	];
+	$newMiddlewares[]='JiJiHoHoCoCo\IchiRoute\Middleware\PutMethodMiddleware';
 	return $this->makeRouteAction($route,$return,$newMiddlewares,'POST');
 }
 
 public function delete(string $route,$return,array $middlewares=[]){
 	$newMiddlewares=$middlewares;
-	$newMiddlewares[]=[
-		'JiJiHoHoCoCo\IchiRoute\Middleware\MethodMiddleware:DELETE'
-	];
+	$newMiddlewares[]='JiJiHoHoCoCo\IchiRoute\Middleware\DeleteMethodMiddleware';
 	return $this->makeRouteAction($route,$return,$newMiddlewares,'POST');
 }
 
@@ -242,9 +238,7 @@ public function head(string $route,$return,array $middlewares=[]){
 
 public function patch(string $route,$return,array $middlewares=[]){
 	$newMiddlewares=$middlewares;
-	$newMiddlewares[]=[
-		'JiJiHoHoCoCo\IchiRoute\Middleware\MethodMiddleware:PATCH'
-	];
+	$newMiddlewares[]='JiJiHoHoCoCo\IchiRoute\Middleware\PatchMethodMiddleware';
 	return $this->makeRouteAction($route,$return,$newMiddlewares,'POST');
 }
 
@@ -254,9 +248,7 @@ public function resource(string $route,$return,array $middlewares=[]){
 	}
 	$route=getRoute($route);
 	$patchMiddlewares=$middlewares;
-	$patchMiddlewares[]=[
-		'JiJiHoHoCoCo\IchiRoute\Middleware\MethodMiddleware:PATCH'
-	];
+	$patchMiddlewares[]='JiJiHoHoCoCo\IchiRoute\Middleware\PatchMethodMiddleware';
 	$this->get($route,$return.'@index',$middlewares);
 	$this->get($route.'/create',$return.'@create',$middlewares);
 	$this->post($route.'/create',$return.'@save',$middlewares);

@@ -2,9 +2,9 @@
 
 namespace JiJiHoHoCoCo\IchiRoute\Middleware;
 use JiJiHoHoCoCo\IchiRoute\UI\NotFound;
-class MethodMiddleware extends MainMiddleware{
+trait MethodMiddlewareTrait{
 
-	public function handle(string $key){
+	public function check(string $key){
 		if(!isset($_REQUEST['__method']) || (isset($_REQUEST['__method']) && $_REQUEST['__method']!==$key ) ){
 			echo NotFound::show('404 - Not Found');
 			exit();
