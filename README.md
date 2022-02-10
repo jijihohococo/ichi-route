@@ -14,6 +14,9 @@ This package is Open Source According to [MIT license](LICENSE.md)
 	* [Nginx](#nginx)
 * [Creating Controller](#creating-controller)
 * [Single Route](#single-route)
+	* [PATCH Method](#patch-method)
+	* [PUT Method](#put-method)
+	* [DELETE Method](#delete-method)
 * [Using Routes](#using-routes)
 * [Route Parameter](#route-parameter)
 * [Resource Route](#resource-route)
@@ -171,6 +174,75 @@ After running route function, the routes (URL) are able to run
 ```php
 
 'items/' (GET METHOD)
+
+```
+
+### PATCH Method
+
+To make PATCH method , you need ```__method``` request and add 'PATCH' values in this.
+And the action must 'POST'.
+
+In your route
+
+```php
+
+$route->patch('items','App\Controllers\ItemController@show');
+
+```
+
+For the form data
+
+```html
+
+<form action="<?php echo route('items'); ?>" method="POST">
+	<?php method('PATCH'); ?>
+</form>
+
+```
+
+### PUT Method
+
+To make PUT method , you need ```__method``` request and add 'PUT' values in this.
+And the action must 'POST'.
+
+In your route
+
+```php
+
+$route->put('items','App\Controllers\ItemController@show');
+
+```
+
+For the form data
+
+```html
+
+<form action="<?php echo route('items'); ?>" method="POST">
+	<?php method('PUT'); ?>
+</form>
+
+```
+
+### DELETE Method
+
+To make DELETE method , you need ```__method``` request and add 'DELETE' values in this.
+And the action must 'POST'.
+
+In your route
+
+```php
+
+$route->delete('items','App\Controllers\ItemController@show');
+
+```
+
+For the form data
+
+```html
+
+<form action="<?php echo route('items'); ?>" method="POST">
+	<?php method('DELETE'); ?>
+</form>
 
 ```
 
