@@ -247,13 +247,12 @@ public function resource(string $route,$return,array $middlewares=[]){
 		throw new \Exception("You can pass controller class with method or closure function", 1);
 	}
 	$route=getRoute($route);
-	$patchMiddlewares=$middlewares;
-	$patchMiddlewares[]='JiJiHoHoCoCo\IchiRoute\Middleware\PatchMethodMiddleware';
+
 	$this->get($route,$return.'@index',$middlewares);
 	$this->get($route.'/create',$return.'@create',$middlewares);
 	$this->post($route.'/create',$return.'@save',$middlewares);
 	$this->get($route.'/{id}/edit',$return.'@edit',$middlewares);
-	$this->post($route.'/{id}/edit',$return.'@update',$patchMiddlewares);
+	$this->patch($route.'/{id}/edit',$return.'@update',$middlewares);
 	$this->delete($route.'/{id}/delete',$return.'@destroy',$middlewares);
 }
 
