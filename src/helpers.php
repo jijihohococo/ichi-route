@@ -6,13 +6,6 @@ if(!function_exists('method')){
 	}
 }
 
-if(!function_exists('old')){
-	function old($data,$default=null){
-
-		echo isset($_REQUEST[$data]) ? $_REQUEST[$data] : e($default);
-	}
-}
-
 if(!function_exists('generateCSRFToken')){
 	function generateCSRFToken(){
 		if(empty($_SESSION['csrf_token']) || !isset($_SESSION['csrf_token']) ){

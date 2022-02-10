@@ -31,7 +31,7 @@ This package is Open Source According to [MIT license](LICENSE.md)
 	* [Caching with Redis](#caching-with-redis)
 	* [Caching with Memcached](#caching-with-memcached)
 * [Error Page Customization](#error-page-customization)
-* [Show Old Request Data](#show-old-request-data)
+
 
 ## Installation
 
@@ -949,24 +949,3 @@ NotFound::setErrorPage($errorPage);
 ```
 
 In your customized function, you must have "$message" and "$code" parameters
-
-
-## Show Old Request Data
-
-You can show old request data after submitting in your php file
-
-```html
-
-<input type="text" name="test" value="<?php old('test'); ?>">
-
-```
-
-If you want to set default data if the request is not isset
-
-```php
-
-old('test','Default Test');
-
-```
-
-<b>This function is aimed to use in create and update data forms.</b>
