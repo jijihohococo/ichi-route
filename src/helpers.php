@@ -9,7 +9,7 @@ if(!function_exists('method')){
 if(!function_exists('old')){
 	function old($data,$default=null){
 
-		echo isset($_REQUEST[$data]) ? $_REQUEST[$data] : echo e($default);
+		echo isset($_REQUEST[$data]) ? $_REQUEST[$data] : e($default);
 	}
 }
 
