@@ -13,6 +13,7 @@ class RouteCommand{
 	private $controllerCommandLine='make:controller';
 
 	private $resourceController=FALSE;
+	private $apiResourceController=FALSE;
 
 	private $green="\033[0;32m";
 	private $red="\033[01;31m";
@@ -65,6 +66,50 @@ class ".$createdFile."{
 }";
 	}
 
+
+	private function makeApiResourceControllerContent(string $defaulFolder,string $createdFile){
+		$variable='$id';
+		return  "<?php
+
+namespace ".$this->getNamespace( $defaulFolder ).";
+
+
+class ".$createdFile."{
+
+
+	public function index(){
+
+
+	}
+
+	public function save(){
+		
+
+	}
+
+
+	public function edit(".$variable."){
+
+
+	}
+
+
+	public function update(".$variable."){
+
+
+	}
+
+
+	public function destroy(".$variable."){
+
+
+	}
+
+
+
+}";
+
+}
 
 	private function makeResourceControllerContent(string $defaulFolder,string $createdFile){
 		$variable='$id';
@@ -169,8 +214,13 @@ class ".$createdFile." extends MainMiddleware{
 			break;
 			
 			case $this->controllerCommandLine:
-			return $this->resourceController==TRUE ? $this->makeResourceControllerContent($defaulFolder,$createdFile) : 
-			$this->makeControllerContent($defaulFolder,$createdFile);
+			if($this->resourceController==TRUE){
+				return $this->makeResourceControllerContent($defaulFolder,$createdFile);
+			}elseif($this->apiResourceController==TRUE){
+				return $this->makeApiResourceControllerContent($defaulFolder,$createdFile);
+			}else{
+				return $this->makeControllerContent($defaulFolder,$createdFile);
+			}
 			break;
 		}
 	}
@@ -208,6 +258,8 @@ class ".$createdFile." extends MainMiddleware{
 		if((count($argv)==3 || count($argv)==4) && ($argv[1]==$this->middlewareCommandLine || $argv[1]==$this->controllerCommandLine ) ){
 			if(isset($argv[3]) && $argv[3]=='--resource' ){
 				$this->resourceController=TRUE;
+			}elseif(isset($argv[3]) && $argv[3]=='--api' ){
+				$this->apiResourceController=TRUE;
 			}
 			$command=$argv[1];
 			$createdOption=$this->checkOption($command);

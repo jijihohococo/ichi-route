@@ -242,6 +242,19 @@ public function patch(string $route,$return,array $middlewares=[]){
 	return $this->makeRouteAction($route,$return,$newMiddlewares,'POST');
 }
 
+public function apiResource(string $route,$return,array $middlewares=[]){
+	if(!is_string($return) && !is_callable($return) ){
+		throw new \Exception("You can pass controller class with method or closure function", 1);
+	}
+	$route=getRoute($route);
+
+	$this->get($route,$return.'@index',$middlewares);
+	$this->post($route.'/create',$return.'@save',$middlewares);
+	$this->get($route.'/{id}/edit',$return.'@edit',$middlewares);
+	$this->patch($route.'/{id}/edit',$return.'@update',$middlewares);
+	$this->delete($route.'/{id}/delete',$return.'@destroy',$middlewares);
+}
+
 public function resource(string $route,$return,array $middlewares=[]){
 	if(!is_string($return) && !is_callable($return) ){
 		throw new \Exception("You can pass controller class with method or closure function", 1);
