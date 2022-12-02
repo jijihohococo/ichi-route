@@ -388,6 +388,26 @@ After running route function, the routes (URL) are able to run
 
 ```
 
+You can also create the api resource controller in terminal after making according to the insturctions from [Creating Controller](#creating-controller)
+
+```php
+
+php ichi make:controller ItemController --api-resource
+
+```
+After running route function, the routes (URL) are able to run
+
+```php
+	
+	'items/' (GET METHOD) // Go to to get items' list
+	'items/create' (POST METHOD) // Create items
+	'items/1/edit' (GET METHOD) // Go to update item
+	'items/1/edit' (PUT METHOD) // Update item
+	'items/1/destroy' (DELETE METHOD) // Delete item
+
+```
+
+
 ## Prefix Route
 
 You can use prefix route to make groups

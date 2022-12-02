@@ -258,7 +258,7 @@ class ".$createdFile." extends MainMiddleware{
 		if((count($argv)==3 || count($argv)==4) && ($argv[1]==$this->middlewareCommandLine || $argv[1]==$this->controllerCommandLine ) ){
 			if(isset($argv[3]) && $argv[3]=='--resource' ){
 				$this->resourceController=TRUE;
-			}elseif(isset($argv[3]) && $argv[3]=='--api' ){
+			}elseif(isset($argv[3]) && $argv[3]=='--api-resource' ){
 				$this->apiResourceController=TRUE;
 			}
 			$command=$argv[1];
