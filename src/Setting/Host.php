@@ -11,7 +11,7 @@ class Host{
 	}
 
 	public function setDefaultDomain(string $domain){
-		$this->defaultDomain=$domain;
+		$this->defaultDomain = $domain;
 	}
 
 }

@@ -9,7 +9,7 @@ if(!function_exists('method')){
 if(!function_exists('generateCSRFToken')){
 	function generateCSRFToken(){
 		if(empty($_SESSION['csrf_token']) || !isset($_SESSION['csrf_token']) ){
-			$_SESSION['csrf_token']=bin2hex(random_bytes(32));
+			$_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 		}
 	}
 }
@@ -21,11 +21,11 @@ if(!function_exists('csrfToken')){
 }
 
 if(!function_exists('getDirectURL')){
-	function getDirectURL($path=null){
-		$url=parse_url($path==null ? $_SERVER["REQUEST_URI"] : $path, PHP_URL_PATH);
-		$urlArray=explode('/', $url);
+	function getDirectURL($path = null){
+		$url = parse_url($path == null ? $_SERVER["REQUEST_URI"] : $path, PHP_URL_PATH);
+		$urlArray = explode('/', $url);
 		if(end($urlArray)!==''){
-			array_push($urlArray,'');
+			array_push($urlArray, '');
 		}
 		return $urlArray;
 	}
@@ -33,7 +33,7 @@ if(!function_exists('getDirectURL')){
 
 if(!function_exists('getRoute')){
 	function getRoute($route){
-		return $route[0]!=='/'?'/'.$route:$route;
+		return $route[0] !== '/'?'/'.$route:$route;
 	}
 }
 
@@ -45,8 +45,8 @@ if(!function_exists('getRouteParameter')){
 
 if(!function_exists('getCachedRoute')){
 	function getCachedRoute($cachingObject,$serverURL,$requestMethod){
-		$newServerURL=$cachingObject->get($serverURL.$requestMethod);
-		return $newServerURL==NULL && substr($serverURL, -1)=='/' ? $cachingObject->get(substr($serverURL,0,-1).$requestMethod) : $newServerURL;
+		$newServerURL = $cachingObject->get($serverURL.$requestMethod);
+		return $newServerURL == NULL && substr($serverURL, -1) == '/' ? $cachingObject->get(substr($serverURL, 0, -1).$requestMethod) : $newServerURL;
 	}
 }
 
@@ -54,7 +54,7 @@ if(!function_exists('addExpiredDateTime')){
 	function addExpiredDateTime($expiredTime){
 		$date = new DateTime();
 		$date->add(new DateInterval('PT'.$expiredTime.'S'));
-		$expiredTime=$date->format('Y-m-d H:i:s');
+		$expiredTime = $date->format('Y-m-d H:i:s');
 		return $expiredTime;
 	}
 }
@@ -83,13 +83,13 @@ if(!function_exists('getAccessData')){
 
 if(!function_exists('addFolderSlash')){
 	function addFolderSlash($path){
-		return substr($path,0,-1)!=='\\'?$path.'\\':$path;
+		return substr($path,0,-1) !== '\\'?$path.'\\':$path;
 	}
 }
 
 if(!function_exists('getSubdomainRoute')){
-	function getSubdomainRoute(string $domain,string $link){
-		$http=!empty($_SERVER['HTTPS']) ? 'https://' : 'http://' ;
+	function getSubdomainRoute(string $domain, string $link){
+		$http = !empty($_SERVER['HTTPS']) ? 'https://' : 'http://' ;
 		return $http . $domain . '/' . $link;
 	}
 }

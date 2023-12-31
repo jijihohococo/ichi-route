@@ -17,7 +17,7 @@ class CORS{
 	}
 
 	public static function setAvailableMethods(array $sites){
-		self::$availableMethods=$sites;
+		self::$availableMethods = $sites;
 	}
 
 	public static function getAvailableMethods(){
@@ -25,7 +25,7 @@ class CORS{
 	}
 
 	public static function setAvailableHeaders(array $headers){
-		self::$availableHeaders=$headers;
+		self::$availableHeaders = $headers;
 	}
 
 	public static function getAvailableHeaders(){
@@ -33,15 +33,15 @@ class CORS{
 	}
 
 	public static function setToAllowCredential(){
-		self::$allowedCredential=TRUE;
+		self::$allowedCredential = TRUE;
 	}
 
 	public static function getAllowedCredential(){
-		return self::$allowedCredential==TRUE ? 'true' : 'false';
+		return self::$allowedCredential == TRUE ? 'true' : 'false';
 	}
 
 	public static function setMaxAge(int $age){
-		self::$maxAge=$age;
+		self::$maxAge = $age;
 	}
 
 	public static function getMaxAge(){
@@ -49,7 +49,7 @@ class CORS{
 	}
 
 	public static function setAvailableSitesRegex(string $regex){
-		self::$availableSitesRegex=$regex;
+		self::$availableSitesRegex = $regex;
 	}
 
 	public static function getAvailableSitesRegex(){

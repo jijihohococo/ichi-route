@@ -5,22 +5,24 @@ namespace JiJiHoHoCoCo\IchiRoute\Command;
 use Exception;
 class RouteCommand{
 
-	private $middlewarePath='app/Middlewares';
-	private $controllerPath='app/Controllers';
+	private $middlewarePath = 'app/Middlewares';
+	private $controllerPath = 'app/Controllers';
 
 
-	private $middlewareCommandLine='make:middleware';
-	private $controllerCommandLine='make:controller';
+	private $middlewareCommandLine = 'make:middleware';
+	private $controllerCommandLine = 'make:controller';
 
-	private $resourceController=FALSE;
-	private $apiResourceController=FALSE;
+	private $resourceController = FALSE;
+	private $apiResourceController = FALSE;
 
-	private $green="\033[0;32m";
-	private $red="\033[01;31m";
-	private $end=" \033[0m";
+	private $green = "\033[0;32m";
+	private $red = "\033[01;31m";
+	private $end = " \033[0m";
+	
+	private $createdFile;
 
 	public function setMiddlewarePath(string $middlewarePath){
-		$this->middlewarePath=$middlewarePath;
+		$this->middlewarePath = $middlewarePath;
 	}
 
 	public function getMiddlewarePath(){
@@ -67,8 +69,8 @@ class ".$createdFile."{
 	}
 
 
-	private function makeApiResourceControllerContent(string $defaulFolder,string $createdFile){
-		$variable='$id';
+	private function makeApiResourceControllerContent(string $defaulFolder, string $createdFile){
+		$variable = '$id';
 		return  "<?php
 
 namespace ".$this->getNamespace( $defaulFolder ).";
@@ -111,8 +113,8 @@ class ".$createdFile."{
 
 }
 
-	private function makeResourceControllerContent(string $defaulFolder,string $createdFile){
-		$variable='$id';
+	private function makeResourceControllerContent(string $defaulFolder, string $createdFile){
+		$variable = '$id';
 		return  "<?php
 
 namespace ".$this->getNamespace( $defaulFolder ).";
@@ -162,8 +164,8 @@ class ".$createdFile."{
 
 }
 
-	private function makeMiddlewareContent(string $defaulFolder,string $createdFile){
-		$next='$this->next();';
+	private function makeMiddlewareContent(string $defaulFolder, string $createdFile){
+		$next = '$this->next();';
 		return "<?php
 
 namespace ". $this->getNamespace( $defaulFolder ).";
@@ -207,19 +209,19 @@ class ".$createdFile." extends MainMiddleware{
 		}
 	}
 
-	private function checkContent(string $command,string $defaulFolder,string $createdFile){
+	private function checkContent(string $command, string $defaulFolder, string $createdFile){
 		switch ($command) {
 			case $this->middlewareCommandLine:
 			return $this->makeMiddlewareContent($defaulFolder,$createdFile);
 			break;
 			
 			case $this->controllerCommandLine:
-			if($this->resourceController==TRUE){
-				return $this->makeResourceControllerContent($defaulFolder,$createdFile);
-			}elseif($this->apiResourceController==TRUE){
-				return $this->makeApiResourceControllerContent($defaulFolder,$createdFile);
+			if($this->resourceController == TRUE){
+				return $this->makeResourceControllerContent($defaulFolder, $createdFile);
+			}elseif($this->apiResourceController == TRUE){
+				return $this->makeApiResourceControllerContent($defaulFolder, $createdFile);
 			}else{
-				return $this->makeControllerContent($defaulFolder,$createdFile);
+				return $this->makeControllerContent($defaulFolder, $createdFile);
 			}
 			break;
 		}
@@ -233,12 +235,12 @@ class ".$createdFile." extends MainMiddleware{
 		return $this->red.$message.$this->end.PHP_EOL;
 	}
 
-	private function alreadyHave(string $createdFile,string $createdOption){
+	private function alreadyHave(string $createdFile, string $createdOption){
 		echo $this->errorMessage($createdFile . " ".$createdOption." is already created");
 		exit();
 	}
 
-	private function success(string $createdFile,string $createdOption){
+	private function success(string $createdFile, string $createdOption){
 		echo $this->successMessage($createdFile . " ".$createdOption." is created successfully");
 		exit();
 	}
@@ -248,30 +250,30 @@ class ".$createdFile." extends MainMiddleware{
 		exit();
 	}
 
-	private function createError(string $createdFile,string $createdOption){
+	private function createError(string $createdFile, string $createdOption){
 		echo $this->errorMessage("You can't create ". $createdFile . " " . $createdOption);
 		exit();
 	}
 
-	public function run(string $dir,array $argv){
+	public function run(string $dir, array $argv){
 
-		if((count($argv)==3 || count($argv)==4) && ($argv[1]==$this->middlewareCommandLine || $argv[1]==$this->controllerCommandLine ) ){
-			if(isset($argv[3]) && $argv[3]=='--resource' ){
+		if((count($argv) == 3 || count($argv) == 4) && ($argv[1] == $this->middlewareCommandLine || $argv[1] == $this->controllerCommandLine ) ){
+			if(isset($argv[3]) && $argv[3] == '--resource' ){
 				$this->resourceController=TRUE;
-			}elseif(isset($argv[3]) && $argv[3]=='--api-resource' ){
-				$this->apiResourceController=TRUE;
+			}elseif(isset($argv[3]) && $argv[3] == '--api-resource' ){
+				$this->apiResourceController = TRUE;
 			}
-			$command=$argv[1];
-			$createdOption=$this->checkOption($command);
-			$defaulFolder=$this->checkPath($command);
-			$baseDir=$dir.'/'.$defaulFolder;
-			if(substr($argv[2], -1)=='/'){
+			$command = $argv[1];
+			$createdOption = $this->checkOption($command);
+			$defaulFolder = $this->checkPath($command);
+			$baseDir = $dir.'/'.$defaulFolder;
+			if(substr($argv[2], -1) == '/'){
 				return $this->wrongCommand();
 			}
 			try {
 				if(!is_dir($baseDir)){
-					$createdFolder=NULL;
-					$basefolder=explode('/', $defaulFolder);
+					$createdFolder = NULL;
+					$basefolder = explode('/', $defaulFolder);
 					foreach($basefolder as $key => $folder){
 						$createdFolder .= $key == 0 ? $dir . '/' . $folder : '/' . $folder;
 						if(!is_dir($createdFolder)){
@@ -279,46 +281,46 @@ class ".$createdFile." extends MainMiddleware{
 						}
 					}
 				}
-				$inputFile=explode('/',$argv[2]);
-				$count=count($inputFile);
+				$inputFile = explode('/',$argv[2]);
+				$count = count($inputFile);
 
-				if($count==1 && $inputFile[0]!==NULL && !file_exists($baseDir.'/'.$inputFile[0].'.php') ){
-					$createdFile=$inputFile[0];
-					fopen($baseDir.'/'.$createdFile.'.php', 'w') or die('Unable to create '.$createdOption);
-						$createdFileContent=$this->checkContent($command,$defaulFolder,$createdFile);
-						file_put_contents($baseDir.'/'.$createdFile.'.php', $createdFileContent);
-						return $this->success($createdFile,$createdOption);
+				if($count == 1 && $inputFile[0] !== NULL && !file_exists($baseDir.'/'.$inputFile[0].'.php') ){
+					$this->createdFile = $inputFile[0];
+					fopen($baseDir.'/'.$this->createdFile.'.php', 'w') or die('Unable to create '.$createdOption);
+					$createdFileContent=$this->checkContent($command, $defaulFolder, $this->createdFile);
+					file_put_contents($baseDir.'/'.$this->createdFile.'.php', $createdFileContent);
+					return $this->success($this->createdFile, $createdOption);
 				
-				}elseif($count==1 && $inputFile[0]!==NULL && file_exists($baseDir . '/'.$inputFile[0].'.php') ){
-					$createdFile=$inputFile[0];
+				}elseif($count == 1 && $inputFile[0] !== NULL && file_exists($baseDir . '/'.$inputFile[0].'.php') ){
+					$this->createdFile = $inputFile[0];
 				
-					return $this->alreadyHave($createdFile,$createdOption);
+					return $this->alreadyHave($this->createdFile, $createdOption);
 				
 				}elseif($count>1 && file_exists($baseDir.'/'. implode('/', $inputFile) . '.php' ) ){
-					$createdFile=implode('/',$inputFile);
-					return $this->alreadyHave($createdFile,$createdOption);
+					$this->createdFile = implode('/',$inputFile);
+					return $this->alreadyHave($this->createdFile, $createdOption);
 				
 				}elseif($count>1 && !file_exists($baseDir .'/'. implode('/', $inputFile) . '.php' ) ){
-					$createdFile=$inputFile[$count-1];
+					$this->createdFile = $inputFile[$count-1];
 					unset($inputFile[$count-1]);
-					$currentFolder=NULL;
-					$newCreatedFolder=NULL;
+					$currentFolder = NULL;
+					$newCreatedFolder = NULL;
 					foreach($inputFile as $key => $folder){
 						$currentFolder .= $key == 0 ? $baseDir . '/' . $folder : '/' . $folder;
-						$newCreatedFolder .= $key ==0 ? $defaulFolder . '/' . $folder : '/' . $folder;
+						$newCreatedFolder .= $key == 0 ? $defaulFolder . '/' . $folder : '/' . $folder;
 						if(!is_dir($currentFolder)){
 							mkdir($currentFolder);
 						}
 					}
 
-					fopen($currentFolder.'/'.$createdFile.'.php', 'w') or die('Unable to create '.$createdOption);
-						$createdFileContent=$this->checkContent($command,$newCreatedFolder,$createdFile);
-						file_put_contents($currentFolder.'/'.$createdFile.'.php', $createdFileContent);
-						return $this->success($createdFile,$createdOption);
+					fopen($currentFolder.'/'.$this->createdFile.'.php', 'w') or die('Unable to create '.$createdOption);
+						$createdFileContent = $this->checkContent($command, $newCreatedFolder, $this->createdFile);
+						file_put_contents($currentFolder.'/'.$this->createdFile.'.php', $createdFileContent);
+						return $this->success($this->createdFile,$createdOption);
 				}
 			} catch (Exception $e) {
 
-				return $this->createError($createdFile,$createdOption);
+				return $this->createError($this->createdFile,$createdOption);
 
 			}
 

@@ -4,15 +4,15 @@ namespace JiJiHoHoCoCo\IchiRoute\UI;
 
 class NotFound{
 
-	private static $errorPage=NULL;
+	private static $errorPage = NULL;
 
 	public static function setErrorPage($errorPage){
-		self::$errorPage=$errorPage;
+		self::$errorPage = $errorPage;
 	}
 
-	public static function show(string $message='404 - URL is not found',int $code=404){
+	public static function show(string $message = '404 - URL is not found', int $code = 404){
 		http_response_code($code);
-		if(self::$errorPage==NULL){
+		if(self::$errorPage == NULL){
 			return <<<HTML
 			<html>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
@@ -25,7 +25,7 @@ class NotFound{
 			</html>
 			HTML;
 		}
-		$errorPage=self::$errorPage;
-		return is_callable($errorPage) ? $errorPage($message,$code) : $errorPage ;
+		$errorPage = self::$errorPage;
+		return is_callable($errorPage) ? $errorPage($message, $code) : $errorPage ;
 	}
 }

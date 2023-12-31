@@ -7,20 +7,20 @@ abstract class MainMiddleware{
 	
 	public $next;
 
-	public $parameters=[];
-	public $domainParameters=[];
+	public $parameters = [];
+	public $domainParameters = [];
 
 	public function setNext(MainMiddleware $next){
-		$this->next=$next;
+		$this->next = $next;
 		return $next;
 	}
 
 	public function setParameters(array $parameters){
-		$this->parameters=$parameters;
+		$this->parameters = $parameters;
 	}
 
 	public function setDomainParameters($domainParameters){
-		$this->domainParameters=$domainParameters;
+		$this->domainParameters = $domainParameters;
 	}
 
 	protected function getDomainParameters(){
