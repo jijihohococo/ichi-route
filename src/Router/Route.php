@@ -448,12 +448,8 @@ class Route{
 			$cacheObject = ${$this->cacheMode};
 			$newServerURL = getCachedRoute($cacheObject, $serverURL, $requestMethod);
 
-			if($newServerURL !== NULL){
-				if(isset($domain['parameterRoutes'][$newServerURL])){
-					return $this->getRouteFromCache($domain['parameterRoutes'], $newServerURL, $domainParameters);
-				}else{
-					$cacheObject->delete($serverURL.$requestMethod);
-				}
+			if($newServerURL !== NULL && isset($domain['parameterRoutes'][$newServerURL])) {
+				return $this->getRouteFromCache($domain['parameterRoutes'], $newServerURL, $domainParameters);
 			}
 		}
 		// FOR CACHED ROUTES //
