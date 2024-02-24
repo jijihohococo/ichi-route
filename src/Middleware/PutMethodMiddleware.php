@@ -2,11 +2,13 @@
 
 namespace JiJiHoHoCoCo\IchiRoute\Middleware;
 
-class PutMethodMiddleware extends MainMiddleware{
-	
+class PutMethodMiddleware extends MainMiddleware
+{
+
 	use MethodMiddlewareTrait;
 
-	public function handle(){
+	public function handle()
+	{
 		return $this->check('PUT');
 	}
 
