@@ -30,7 +30,7 @@ class RouteCommand{
 	}
 
 	public function setControllerPath(string $controllerPath){
-		$this->controllerPath=$controllerPath;
+		$this->controllerPath = $controllerPath;
 	}
 
 	public function getControllerPath(){
@@ -45,9 +45,10 @@ class RouteCommand{
 		return "<?php 
 
 namespace ".$this->getNamespace( $defaulFolder ).";
+namespace JiJiHoHoCoCo\IchiRoute\Controller\BaseController;
 
 
-class ".$createdFile."{
+class ".$createdFile." extends BaseController {
 
 
 
@@ -74,9 +75,10 @@ class ".$createdFile."{
 		return  "<?php
 
 namespace ".$this->getNamespace( $defaulFolder ).";
+namespace JiJiHoHoCoCo\IchiRoute\Controller\BaseController;
 
 
-class ".$createdFile."{
+class ".$createdFile." extends BaseController{
 
 
 	public function index(){
@@ -118,9 +120,10 @@ class ".$createdFile."{
 		return  "<?php
 
 namespace ".$this->getNamespace( $defaulFolder ).";
+namespace JiJiHoHoCoCo\IchiRoute\Controller\BaseController;
 
 
-class ".$createdFile."{
+class ".$createdFile." extends BaseController{
 
 
 	public function index(){

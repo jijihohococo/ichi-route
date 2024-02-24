@@ -10,20 +10,68 @@ class NotFound{
 		self::$errorPage = $errorPage;
 	}
 
-	public static function show(string $message = '404 - URL is not found', int $code = 404){
-		http_response_code($code);
+	public static function show(string $message, int $code){
 		if(self::$errorPage == NULL){
 			return <<<HTML
-			<html>
-			<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-			<title>$message</title>
-			<body style="background-color: black;">
-			<div style="position: fixed;top:50%;left:50%;transform: translate(-50%, -50%);color:white;font-family: 'Nunito', sans-serif;">
-			<p>$message</p>
-			</div>
-			</body>
-			</html>
-			HTML;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+
+    header {
+      background-color: #333;
+      color: 0000;
+      text-align: center;
+      padding: 1rem;
+    }
+
+    section {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 1rem;
+      background-color: 0000;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    footer {
+      background-color: #333;
+      color: 0000;
+      text-align: center;
+      padding: 1rem;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+    }
+
+    /* Media queries for responsive design */
+
+    @media only screen and (max-width: 600px) {
+      section {
+        margin: 1rem;
+      }
+    }
+  </style>
+  <title> $code - Error</title>
+</head>
+<body>
+  <header>
+    <h1>$code - Error</h1>
+  </header>
+
+  <section>
+    <p>$message</p>
+  </section>
+</body>
+</html>
+HTML;
 		}
 		$errorPage = self::$errorPage;
 		return is_callable($errorPage) ? $errorPage($message, $code) : $errorPage ;

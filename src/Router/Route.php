@@ -2,6 +2,7 @@
 
 namespace JiJiHoHoCoCo\IchiRoute\Router;
 
+use Exception;
 use JiJiHoHoCoCo\IchiRoute\Container\DependencyInject;
 use JiJiHoHoCoCo\IchiRoute\Middleware\RouteMiddleware;
 use JiJiHoHoCoCo\IchiRoute\Cache\RouteCache;
@@ -21,10 +22,28 @@ class Route{
 
 	private $host, $currentDomain, $domains, $parameterDomains;
 	private $usedMultipleDomains = FALSE;
+	private $keyValues = [];
+
+
 	public function __construct(){
 		$this->dependencyInject = new DependencyInject;
 		$this->routeMiddleware = new RouteMiddleware;
 		$this->host = new Host;
+	}
+
+	public function setKeyValue(string $key, $values) {
+		$this->keyValues[$key] = $values;
+	}
+
+	public function getKeyValue(string $key) {
+		if (isset($this->keyValues[$key])) {
+			return $this->keyValues[$key];
+		}
+		return null;
+	}
+
+	public function getKeyValues() {
+		return $this->keyValues;
 	}
 
 	public function setDefaultDomain(string $domain){
@@ -105,7 +124,16 @@ class Route{
 					}
 					$functionName = $calledFunction[1];
 					unset($parameters[0]);
-					return $this->dependencyInject->getConstructor($className, $functionName, $parameters);
+					$routeKeyalues = $this->getKeyValues();
+					$this->dependencyInject->setCreatedClass($className);
+					$this->dependencyInject->setFunctionName($functionName);
+					$this->dependencyInject->setFunctionParameters($parameters);
+					if ( !empty($routeKeyalues) ) {
+						foreach($routeKeyalues as $key => $value) {
+							$this->dependencyInject->setKeyValue($key, $value);
+						}
+					}
+					return $this->dependencyInject->runClassFunction();
 				}else{
 					throw new \Exception("You don't pass controller and function correctly", 1);
 				}
@@ -121,9 +149,9 @@ class Route{
 		$this->defaultMiddlewares = $middlewares;
 	}
 
-	public function showErrorPage(){
-		http_response_code(404);
-		echo NotFound::show();
+	public function showErrorPage(string $message = '404 - URL is not found', int $code = 404){
+		http_response_code($code);
+		echo NotFound::show($message, $code);
 	}
 
 	public function getBaseControllerPath(){
@@ -536,45 +564,50 @@ class Route{
 
 	public function run(){
 
-		header("X-XSS-Protection: 1; mode=block");
-		header('X-Content-Type-Options: nosniff');
+		try{
 
-		$serverHost = $this->getServerHost();
+			header("X-XSS-Protection: 1; mode=block");
+			header('X-Content-Type-Options: nosniff');
 
-		// INCLUDING DOMAIN CHECKING //
-		if(is_array($this->domains)){
-			// FOR SPECFIC DOMAIN //
-			if(isset($this->domains[$serverHost])){
-				return $this->runDomain($this->domains[$serverHost]);
-			}
-			// FOR SPECFIC DOMAIN //
+			$serverHost = $this->getServerHost();
 
-			// FOR PARAMETER DOMAIN //
-			if(is_array($this->parameterDomains)){
-				foreach($this->parameterDomains as $domainKey => $domain){
-					$parameters = [];
-					$domainArray = explode('.', $domainKey);
-					$serverHostArray = $hostArray = explode('.',$serverHost);
-					if(count($domainArray) == count($hostArray)){
-						foreach($domain['parameters'] as $parameterKey => $parameter){
-							$parameters[$parameterKey] = $serverHostArray[$parameterKey];
-							$serverHostArray[$parameterKey] = $parameter;
-						}
-						$newDomain = implode('.',$serverHostArray);
-						if(isset($this->domains[$newDomain])){
-							$this->routeMiddleware->setDomainParameters($parameters);
-							return $this->runDomain($this->domains[$newDomain], $parameters);
-						}else{
-							$serverHostArray = $hostArray;
+			// INCLUDING DOMAIN CHECKING //
+			if(is_array($this->domains)){
+				// FOR SPECFIC DOMAIN //
+				if(isset($this->domains[$serverHost])){
+					return $this->runDomain($this->domains[$serverHost]);
+				}
+				// FOR SPECFIC DOMAIN //
+
+				// FOR PARAMETER DOMAIN //
+				if(is_array($this->parameterDomains)){
+					foreach($this->parameterDomains as $domainKey => $domain){
+						$parameters = [];
+						$domainArray = explode('.', $domainKey);
+						$serverHostArray = $hostArray = explode('.',$serverHost);
+						if(count($domainArray) == count($hostArray)){
+							foreach($domain['parameters'] as $parameterKey => $parameter){
+								$parameters[$parameterKey] = $serverHostArray[$parameterKey];
+								$serverHostArray[$parameterKey] = $parameter;
+							}
+							$newDomain = implode('.',$serverHostArray);
+							if(isset($this->domains[$newDomain])){
+								$this->routeMiddleware->setDomainParameters($parameters);
+								return $this->runDomain($this->domains[$newDomain], $parameters);
+							}else{
+								$serverHostArray = $hostArray;
+							}
 						}
 					}
-				}
-				return $this->showErrorPage();
+					return $this->showErrorPage();
 
+				}
+				// FOR PARAMETER DOMAIN //
 			}
-			// FOR PARAMETER DOMAIN //
+			// INCLUDING DOMAIN CHECKING //
+			return $this->showErrorPage();
+		} catch (Exception $e) {
+			return $this->showErrorPage($e->getMessage(), 405);
 		}
-		// INCLUDING DOMAIN CHECKING //
-		return $this->showErrorPage();
 	}
 }

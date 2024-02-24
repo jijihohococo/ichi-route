@@ -4,12 +4,70 @@ namespace JiJiHoHoCoCo\IchiRoute\Container;
 use ReflectionClass;
 class DependencyInject{
 
-	public function getConstructor($className, $functionName, $functionParameters){
-		$createdClass = $this->getObject($className);
-		if(!method_exists($createdClass, $functionName)){
-			throw new \Exception($functionName. " function is not exist in ".$className . " Class", 1);
+	private $keyValues = [];
+	private $createdClass;
+	private $functionName;
+	private $functionParameters;
+
+	public function setCreatedClass($className) {
+		$this->createdClass = $this->getObject($className);
+	}
+
+	public function getCreatedClass() {
+		return $this->createdClass;
+	}
+
+	public function setFunctionName($functionName) {
+		$this->functionName = $functionName;
+	}
+
+	public function getFunctionName() {
+		return $this->functionName;
+	}
+
+	public function setFunctionParameters($functionParameters) {
+		$this->functionParameters = $functionParameters;
+	}
+
+	public function getFunctionParameters() {
+		return $this->functionParameters;
+	}
+
+	public function setKeyValue(string $key, $value) {
+		if ($this->createdClass == NULL ) {
+			throw new \Exception("You need to set the created class");
 		}
-		return call_user_func_array([$createdClass, $functionName], $functionParameters);
+		if (!method_exists($this->createdClass, "setKeyValue")) {
+			throw new \Exception("'setKeyValue' function is not exist in ".$this->createdClass . " Class", 1);
+		}
+		$this->createdClass->setKeyValue($key, $value);
+	}
+
+	public function getKeyValue(string $key) {
+		if ($this->createdClass == NULL ) {
+			throw new \Exception("You need to set the created class");
+		}
+		if (!method_exists($this->createdClass, "getKeyValue")) {
+			throw new \Exception("'getKeyValue' function is not exist in ".$this->createdClass . " Class", 1);
+		}
+		return $this->createdClass->getKeyValue($key);
+	}
+
+	public function runClassFunction() {
+		if ($this->createdClass == NULL ) {
+			throw new \Exception("You need to set the created class");
+		}
+		if ($this->functionName == NULL ) {
+			throw new \Exception("You need to set the function name");
+		}
+		if(!method_exists($this->createdClass, $this->functionName)){
+			throw new \Exception($this->functionName. " function is not exist in ".$this->className . " Class", 1);
+		}
+
+		return call_user_func_array([
+			$this->createdClass,
+			$this->functionName
+		], $this->functionParameters);
 	}
 
 	public function getObject($className){
