@@ -1,5 +1,7 @@
 <?php
 
+use JiJiHoHoCoCo\IchiRoute\UI\ErrorPage;
+
 if (!function_exists('method')) {
 	function method(string $key)
 	{
@@ -104,5 +106,57 @@ if (!function_exists('getSubdomainRoute')) {
 	{
 		$http = !empty($_SERVER['HTTPS']) ? 'https://' : 'http://';
 		return $http . $domain . '/' . $link;
+	}
+}
+
+if (!function_exists('showErrorPage')) {
+	function showErrorPage(string $message, int $code = 500)
+	{
+		$headers = getallheaders();
+		if (isset($headers['Content-Type']) && $headers['Content-Type'] == 'application/json') {
+			return jsonResponse([
+				'status' => $code,
+				'message' => $message
+			], $code);
+		} else {
+			http_response_code($code);
+			echo ErrorPage::show($message, $code);
+			exit();
+		}
+	}
+}
+
+if (!function_exists('getCallerInfo')) {
+	function getCallerInfo()
+	{
+		// Get the call stack
+		$backtrace = debug_backtrace();
+		// Skip the first element (current function)
+		array_shift($backtrace);
+		// Extract information about the caller
+		$caller = $backtrace[0]; // Index 0 is the immediate caller
+		return $caller;
+	}
+}
+
+if (!function_exists('showCallerInfo')) {
+	function showCallerInfo(array $callerInfo)
+	{
+		if (isset($callerInfo['file']) && isset($callerInfo['line'])) {
+			$callerFile = $callerInfo['file'];
+			$callerLine = $callerInfo['line'];
+			return "\nError in file '$callerFile' at line $callerLine";
+		}
+		return null;
+	}
+}
+
+if (!function_exists('jsonResponse')) {
+	function jsonResponse(array $data, int $code = 200)
+	{
+		header('Content-type:application/json');
+		http_response_code($code);
+		echo json_encode($data);
+		return TRUE;
 	}
 }

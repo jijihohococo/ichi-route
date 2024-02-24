@@ -2,7 +2,7 @@
 
 namespace JiJiHoHoCoCo\IchiRoute\UI;
 
-class NotFound
+class ErrorPage
 {
 
   private static $errorPage = NULL;

@@ -978,9 +978,9 @@ You can call the error page (whatever it is default or customized)
 
 ```php
 
-use JiJiHoHoCoCo\IchiRoute\UI\NotFound;
+use JiJiHoHoCoCo\IchiRoute\UI\ErrorPage;
 
-echo NotFound::show();
+echo ErrorPage::show();
 exit();
 ```
 
@@ -991,9 +991,9 @@ You can customize error message and HTTP response code
 
 ```php
 
-use JiJiHoHoCoCo\IchiRoute\UI\NotFound;
+use JiJiHoHoCoCo\IchiRoute\UI\ErrorPage;
 
-echo NotFound::show('403 - Unauthorized Request',403);
+echo ErrorPage::show('403 - Unauthorized Request',403);
 exit();
 ```
 
@@ -1001,9 +1001,9 @@ If you don't like the default error page from this library,you can show the own 
 
 ```php
 
-use JiJiHoHoCoCo\IchiRoute\UI\NotFound;
+use JiJiHoHoCoCo\IchiRoute\UI\ErrorPage;
 
-NotFound::setErrorPage('<!DOCTYPE html>
+ErrorPage::setErrorPage('<!DOCTYPE html>
 <html>
 <head>
 <title>Page Title</title>
@@ -1021,7 +1021,7 @@ If you want to show more specific error according to your HTTP response code, yo
 
 ```php
 
-use JiJiHoHoCoCo\IchiRoute\UI\NotFound;
+use JiJiHoHoCoCo\IchiRoute\UI\ErrorPage;
 
 $errorPage=function($message,$code){
 		return <<<HTML
@@ -1037,7 +1037,7 @@ $errorPage=function($message,$code){
 			HTML;
 	};
 
-NotFound::setErrorPage($errorPage);
+ErrorPage::setErrorPage($errorPage);
 ```
 
 In your customized function, you must have "$message" and "$code" parameters

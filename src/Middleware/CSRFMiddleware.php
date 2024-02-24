@@ -2,7 +2,7 @@
 
 namespace JiJiHoHoCoCo\IchiRoute\Middleware;
 
-use JiJiHoHoCoCo\IchiRoute\UI\NotFound;
+use JiJiHoHoCoCo\IchiRoute\UI\ErrorPage;
 
 class CSRFMiddleware extends MainMiddleware
 {
@@ -18,7 +18,7 @@ class CSRFMiddleware extends MainMiddleware
 				unset($_SESSION['csrf_token']);
 			}
 
-			echo NotFound::show('401 - CSRF Token Expired', 401);
+			echo ErrorPage::show('401 - CSRF Token Expired', 401);
 			exit();
 		}
 		return $this->next();
