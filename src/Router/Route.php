@@ -221,27 +221,23 @@ class Route
 
 	private function addParameterRoutes($url, $parameters, $method)
 	{
-		$i = 0;
 		$currentDomain = $this->getCurrentDomain();
-		foreach (explode('/', $url) as $key => $urlData) {
+		$paramKeys = [];
+		$urlArray = explode('/', $url);
+		foreach ($urlArray as $key => $urlData) {
 			if (substr($urlData, 0, 1) == '{' && substr($urlData, -1) == '}') {
-				if (
-					isset($this->domains[$currentDomain]['parameterRoutes']) &&
-					isset($this->domains[$currentDomain]['parameterRoutes'][$url . '{' . $method . '}'])
-				) {
-					if ($i == 0) {
-						throw new Exception($url . " is duplicated", 1);
-					}
-					$this->domains[$currentDomain]['parameterRoutes'][$url . '{' . $method . '}']['parameters'][$key] = $urlData;
-				} else {
-
-
-					$this->domains[$currentDomain]['parameterRoutes'][$url . '{' . $method . '}'] = $this->getRouteData($parameters, $method);
-					$this->domains[$currentDomain]['parameterRoutes'][$url . '{' . $method . '}']['parameters'] = [$key => $urlData];
-				}
-				$i++;
+				$paramKeys[$key] = $urlData;
 			}
 		}
+		if (
+			isset($this->domains[$currentDomain]['parameterRoutes']) &&
+			isset($this->domains[$currentDomain]['parameterRoutes'][$url . '{' . $method . '}'])
+		) {
+			throw new Exception($url . " is duplicated", 1);
+
+		}
+		$this->domains[$currentDomain]['parameterRoutes'][$url . '{' . $method . '}'] = $this->getRouteData($parameters, $method);
+		$this->domains[$currentDomain]['parameterRoutes'][$url . '{' . $method . '}']['parameters'] = $paramKeys;
 	}
 
 	private function getRouteData($parameters, $method)
@@ -710,8 +706,8 @@ class Route
 		} catch (Exception $e) {
 			$eFile = $e->getFile();
 			return showErrorPage(
-				$eFile !== $this->dependencyInject->getClassFilePath() ? 
-				$e->getMessage() . showCallerInfo(self::$caller) : 
+				$eFile !== $this->dependencyInject->getClassFilePath() ?
+				$e->getMessage() . showCallerInfo(self::$caller) :
 				$e->getMessage()
 			);
 		}
