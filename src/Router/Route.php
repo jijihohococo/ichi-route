@@ -657,7 +657,7 @@ class Route
 				}
 			}
 		}
-		return showErrorPage(self::PAGE_NOT_FOUND . showCallerInfo(self::$caller), 404);
+		return showErrorPage(self::PAGE_NOT_FOUND, 404);
 		// FOR PARAMETER ROUTES //
 	}
 
@@ -700,13 +700,13 @@ class Route
 							}
 						}
 					}
-					return showErrorPage(self::PAGE_NOT_FOUND . showCallerInfo(self::$caller), 404);
+					return showErrorPage(self::PAGE_NOT_FOUND, 404);
 
 				}
 				// FOR PARAMETER DOMAIN //
 			}
 			// INCLUDING DOMAIN CHECKING //
-			return showErrorPage(self::PAGE_NOT_FOUND . showCallerInfo(self::$caller), 404);
+			return showErrorPage(self::PAGE_NOT_FOUND, 404);
 		} catch (Exception $e) {
 			return showErrorPage($e->getMessage() . showCallerInfo(self::$caller));
 		}
