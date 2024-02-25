@@ -24,7 +24,7 @@ class Route
 	private $usedMultipleDomains = FALSE;
 	private $keyValues = [];
 
-	private $caller;
+	private static $caller = [];
 
 	const PAGE_NOT_FOUND = "404 - URL is not found.";
 
@@ -76,7 +76,7 @@ class Route
 	public function setRedis($redis, int $redisCachedTime = NULL)
 	{
 		try {
-			$this->caller = getCallerInfo();
+			self::$caller = getCallerInfo();
 			if (!is_a($redis, 'Redis')) {
 				throw new Exception("You need to use php redis object", 1);
 			}
@@ -87,7 +87,7 @@ class Route
 			$this->redisCachedTime = $redisCachedTime;
 			$this->cacheMode = 'redis';
 		} catch (Exception $e) {
-			return showErrorPage($e->getMessage() . showCallerInfo($this->caller));
+			return showErrorPage($e->getMessage() . showCallerInfo(self::$caller));
 		}
 	}
 
@@ -99,7 +99,7 @@ class Route
 	public function setMemcached($memcached, int $memcachedCachedTime = 0)
 	{
 		try {
-			$this->caller = getCallerInfo();
+			self::$caller = getCallerInfo();
 			if (!is_a($memcached, 'Memcached')) {
 				throw new Exception("You need to use php memcached object", 1);
 			}
@@ -110,7 +110,7 @@ class Route
 			$this->memcachedCachedTime = $memcachedCachedTime;
 			$this->cacheMode = 'memcached';
 		} catch (Exception $e) {
-			return showErrorPage($e->getMessage() . showCallerInfo($this->caller));
+			return showErrorPage($e->getMessage() . showCallerInfo(self::$caller));
 		}
 	}
 
@@ -122,7 +122,7 @@ class Route
 	public function setPDO(PDO $pdo, int $pdoCachedTime = NULL)
 	{
 		try {
-			$this->caller = getCallerInfo();
+			self::$caller = getCallerInfo();
 			if ($this->cacheMode !== NULL) {
 				throw new Exception("You already set " . $this->cacheMode . " Mode", 1);
 			}
@@ -130,7 +130,7 @@ class Route
 			$this->pdoCachedTime = $pdoCachedTime;
 			$this->cacheMode = 'pdo';
 		} catch (Exception $e) {
-			return showErrorPage($e->getMessage() . showCallerInfo($this->caller));
+			return showErrorPage($e->getMessage() . showCallerInfo(self::$caller));
 		}
 	}
 
@@ -176,13 +176,13 @@ class Route
 
 	public function setBaseControllerPath(string $baseControllerPath)
 	{
-		$this->caller = getCallerInfo();
+		self::$caller = getCallerInfo();
 		$this->baseControllerPath = addFolderSlash($baseControllerPath);
 	}
 
 	public function setDefaultMiddlewares(array $middlewares)
 	{
-		$this->caller = getCallerInfo();
+		self::$caller = getCallerInfo();
 		$this->defaultMiddlewares = $middlewares;
 	}
 
@@ -193,7 +193,7 @@ class Route
 
 	public function setBaseMiddlewarePath(string $baseMiddlewarePath)
 	{
-		$this->caller = getCallerInfo();
+		self::$caller = getCallerInfo();
 		$this->baseMiddlewarePath = addFolderSlash($baseMiddlewarePath);
 	}
 
@@ -291,18 +291,18 @@ class Route
 	}
 	public function get(string $route, $return, array $middlewares = [])
 	{
-		$this->caller = getCallerInfo();
+		self::$caller = getCallerInfo();
 		return $this->makeRouteAction($route, $return, $middlewares, 'GET');
 	}
 	public function post(string $route, $return, array $middlewares = [])
 	{
-		$this->caller = getCallerInfo();
+		self::$caller = getCallerInfo();
 		return $this->makeRouteAction($route, $return, $middlewares, 'POST');
 	}
 
 	public function put(string $route, $return, array $middlewares = [])
 	{
-		$this->caller = getCallerInfo();
+		self::$caller = getCallerInfo();
 		$newMiddlewares = $middlewares;
 		$newMiddlewares[] = 'JiJiHoHoCoCo\IchiRoute\Middleware\PutMethodMiddleware';
 		return $this->makeRouteAction($route, $return, $newMiddlewares, 'POST');
@@ -310,7 +310,7 @@ class Route
 
 	public function delete(string $route, $return, array $middlewares = [])
 	{
-		$this->caller = getCallerInfo();
+		self::$caller = getCallerInfo();
 		$newMiddlewares = $middlewares;
 		$newMiddlewares[] = 'JiJiHoHoCoCo\IchiRoute\Middleware\DeleteMethodMiddleware';
 		return $this->makeRouteAction($route, $return, $newMiddlewares, 'POST');
@@ -318,13 +318,13 @@ class Route
 
 	public function head(string $route, $return, array $middlewares = [])
 	{
-		$this->caller = getCallerInfo();
+		self::$caller = getCallerInfo();
 		return $this->makeRouteAction($route, $return, $middlewares, 'HEAD');
 	}
 
 	public function patch(string $route, $return, array $middlewares = [])
 	{
-		$this->caller = getCallerInfo();
+		self::$caller = getCallerInfo();
 		$newMiddlewares = $middlewares;
 		$newMiddlewares[] = 'JiJiHoHoCoCo\IchiRoute\Middleware\PatchMethodMiddleware';
 		return $this->makeRouteAction($route, $return, $newMiddlewares, 'POST');
@@ -333,7 +333,7 @@ class Route
 	public function apiResource(string $route, $return, array $middlewares = [])
 	{
 		try {
-			$this->caller = getCallerInfo();
+			self::$caller = getCallerInfo();
 			if (!is_string($return) && !is_callable($return)) {
 				throw new Exception("You can pass controller class with method or closure function", 1);
 			}
@@ -345,14 +345,14 @@ class Route
 			$this->patch($route . '/{id}/edit', $return . '@update', $middlewares);
 			$this->delete($route . '/{id}/delete', $return . '@destroy', $middlewares);
 		} catch (Exception $e) {
-			return showErrorPage($e->getMessage() . showCallerInfo($this->caller));
+			return showErrorPage($e->getMessage() . showCallerInfo(self::$caller));
 		}
 	}
 
 	public function resource(string $route, $return, array $middlewares = [])
 	{
 		try {
-			$this->caller = getCallerInfo();
+			self::$caller = getCallerInfo();
 			if (!is_string($return) && !is_callable($return)) {
 				throw new Exception("You can pass controller class with method or closure function", 1);
 			}
@@ -365,14 +365,14 @@ class Route
 			$this->patch($route . '/{id}/edit', $return . '@update', $middlewares);
 			$this->delete($route . '/{id}/delete', $return . '@destroy', $middlewares);
 		} catch (Exception $e) {
-			return showErrorPage($e->getMessage() . showCallerInfo($this->caller));
+			return showErrorPage($e->getMessage() . showCallerInfo(self::$caller));
 		}
 	}
 
 	public function any(string $route, $return, array $middlewares = [])
 	{
 		try {
-			$this->caller = getCallerInfo();
+			self::$caller = getCallerInfo();
 			if (!is_string($return) && !is_callable($return)) {
 				throw new Exception("You can pass controller class with method or closure function", 1);
 			}
@@ -383,7 +383,7 @@ class Route
 			$this->delete($route, $return, $middlewares);
 			$this->head($route, $return, $middlewares);
 		} catch (Exception $e) {
-			return showErrorPage($e->getMessage() . showCallerInfo($this->caller));
+			return showErrorPage($e->getMessage() . showCallerInfo(self::$caller));
 		}
 	}
 
@@ -398,7 +398,7 @@ class Route
 	public function domain(string $domain, callable $function)
 	{
 		try {
-			$this->caller = getCallerInfo();
+			self::$caller = getCallerInfo();
 			if ($this->currentGroup !== NULL) {
 				throw new Exception("Don't use domain function within group function", 1);
 			}
@@ -429,13 +429,13 @@ class Route
 			$function->call($this);
 			$this->currentDomain = NULL;
 		} catch (Exception $e) {
-			return showErrorPage($e->getMessage() . showCallerInfo($this->caller));
+			return showErrorPage($e->getMessage() . showCallerInfo(self::$caller));
 		}
 	}
 
 	public function group(array $data, callable $function)
 	{
-		$this->caller = getCallerInfo();
+		self::$caller = getCallerInfo();
 		$this->numberOfGroups++;
 		if ($this->currentGroup == null) {
 			$this->groupURL[$this->numberOfGroups] = [
@@ -657,13 +657,13 @@ class Route
 				}
 			}
 		}
-		return showErrorPage(self::PAGE_NOT_FOUND . showCallerInfo($this->caller), 404);
+		return showErrorPage(self::PAGE_NOT_FOUND . showCallerInfo(self::$caller), 404);
 		// FOR PARAMETER ROUTES //
 	}
 
 	public function run()
 	{
-		$this->caller = getCallerInfo();
+		self::$caller = getCallerInfo();
 
 		try {
 
@@ -700,15 +700,15 @@ class Route
 							}
 						}
 					}
-					return showErrorPage(self::PAGE_NOT_FOUND . showCallerInfo($this->caller), 404);
+					return showErrorPage(self::PAGE_NOT_FOUND . showCallerInfo(self::$caller), 404);
 
 				}
 				// FOR PARAMETER DOMAIN //
 			}
 			// INCLUDING DOMAIN CHECKING //
-			return showErrorPage(self::PAGE_NOT_FOUND . showCallerInfo($this->caller), 404);
+			return showErrorPage(self::PAGE_NOT_FOUND . showCallerInfo(self::$caller), 404);
 		} catch (Exception $e) {
-			return showErrorPage($e->getMessage() . showCallerInfo($this->caller));
+			return showErrorPage($e->getMessage() . showCallerInfo(self::$caller));
 		}
 	}
 }

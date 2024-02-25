@@ -145,7 +145,7 @@ if (!function_exists('showCallerInfo')) {
 		if (isset($callerInfo['file']) && isset($callerInfo['line'])) {
 			$callerFile = $callerInfo['file'];
 			$callerLine = $callerInfo['line'];
-			return "\nError in file '$callerFile' at line $callerLine";
+			return nl2br(" \n Error in file '$callerFile' at line $callerLine");
 		}
 		return null;
 	}
