@@ -227,17 +227,20 @@ class Route
 		foreach ($urlArray as $key => $urlData) {
 			if (substr($urlData, 0, 1) == '{' && substr($urlData, -1) == '}') {
 				$paramKeys[$key] = $urlData;
+				$url = str_replace($urlData, '[^/]+', $url);
 			}
 		}
+		$url = substr($url, 1);
+		$url = "(^" . $url . '{' . $method . '}$)';
 		if (
 			isset($this->domains[$currentDomain]['parameterRoutes']) &&
-			isset($this->domains[$currentDomain]['parameterRoutes'][$url . '{' . $method . '}'])
+			isset($this->domains[$currentDomain]['parameterRoutes'][$url])
 		) {
 			throw new Exception($url . " is duplicated", 1);
 
 		}
-		$this->domains[$currentDomain]['parameterRoutes'][$url . '{' . $method . '}'] = $this->getRouteData($parameters, $method);
-		$this->domains[$currentDomain]['parameterRoutes'][$url . '{' . $method . '}']['parameters'] = $paramKeys;
+		$this->domains[$currentDomain]['parameterRoutes'][$url] = $this->getRouteData($parameters, $method);
+		$this->domains[$currentDomain]['parameterRoutes'][$url]['parameters'] = $paramKeys;
 	}
 
 	private function getRouteData($parameters, $method)
@@ -614,43 +617,53 @@ class Route
 
 		// FOR PARAMETER ROUTES //
 		if (isset($domain['parameterRoutes'])) {
-			$url = $urlData = getDirectURL();
+			$urlData = getDirectURL();
 			$availableParameterRoute = null;
-			foreach ($domain['parameterRoutes'] as $urlKey => $route) {
+			$url = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH) . $requestMethod;
+			$url = substr($url, 1);
+			$parameterRouteKeys = array_keys($domain['parameterRoutes']);
+			$combinedPattern = '~' . implode('|', $parameterRouteKeys) . '~';
+			preg_match($combinedPattern, $url, $matches);
+			if (empty($matches)) {
+				// 	// NO ROUTE //
+				return showErrorPage(self::PAGE_NOT_FOUND, 404);
+			}
+			$avaialbleRoute = array_filter($matches);
+			unset($avaialbleRoute[0]);
+			foreach ($avaialbleRoute as $key => $currentRoute) {
+				$avaialbleKey = $key;
+			}
+			$newServerURL = $parameterRouteKeys[$avaialbleKey - 1];
+
+			if (isset($domain['parameterRoutes'][$newServerURL])) {
+				$availableParameterRoute = $domain['parameterRoutes'][$newServerURL];
 				$parameters = [];
-				$requestURL = getDirectURL(str_replace($requestMethod, '', $urlKey));
-				if (count($requestURL) == count($urlData) && $method == $route['method']) {
-					$middlewareParameters = [];
-					$parameterRoute = $route['parameters'];
-					foreach ($parameterRoute as $parameterKey => $parameter) {
-						$parameters[$parameterKey] = $url[$parameterKey];
-						$url[$parameterKey] = $parameter;
-						$newValue = getRouteParameter($parameter);
-						$middlewareParameters[$newValue] = $parameters[$parameterKey];
-					}
-					$newServerURL = substr(implode('/', $url), 0, -1) . $requestMethod;
-					if (isset($domain['parameterRoutes'][$newServerURL])) {
-
-						if ($this->cacheMode !== NULL) {
-							$saveRoute = substr(implode('/', $urlData), 0, -1) . $requestMethod;
-							${$this->cacheMode}->set($saveRoute, $newServerURL, $this->{$this->cacheMode . 'CachedTime'});
-						}
-
-
-						$availableParameterRoute = $domain['parameterRoutes'][$newServerURL];
-
-						$check = $this->checkMiddleware($domain['parameterRoutes'], $newServerURL, $middlewareParameters);
-
-						if ($check !== NULL) {
-							return $check;
-						}
-						return $this->domainParameterRouteRun($domainParameters, $parameters, $availableParameterRoute['function']);
-
-					} else {
-						$url = $urlData;
-					}
-
+				$middlewareParameters = [];
+				$parameterRoute = $availableParameterRoute['parameters'];
+				foreach ($parameterRoute as $parameterKey => $parameter) {
+					$parameters[$parameterKey] = $urlData[$parameterKey];
+					$urlData[$parameterKey] = $parameter;
+					$newValue = getRouteParameter($parameter);
+					$middlewareParameters[$newValue] = $parameters[$parameterKey];
 				}
+
+				if ($this->cacheMode !== NULL) {
+					$saveRoute = substr(implode('/', $urlData), 0, -1) . $requestMethod;
+					${$this->cacheMode}->set($saveRoute, $newServerURL, $this->{$this->cacheMode . 'CachedTime'});
+				}
+
+
+				$availableParameterRoute = $domain['parameterRoutes'][$newServerURL];
+
+				$check = $this->checkMiddleware($domain['parameterRoutes'], $newServerURL, $middlewareParameters);
+
+				if ($check !== NULL) {
+					return $check;
+				}
+				return $this->domainParameterRouteRun($domainParameters, $parameters, $availableParameterRoute['function']);
+
+			} else {
+				return showErrorPage(self::PAGE_NOT_FOUND, 404);
 			}
 		}
 		return showErrorPage(self::PAGE_NOT_FOUND, 404);
