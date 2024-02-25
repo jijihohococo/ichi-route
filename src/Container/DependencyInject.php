@@ -110,4 +110,15 @@ class DependencyInject
 		return $objects;
 
 	}
+
+	public function getClassFilePath()
+	{
+        // Get the reflection class for the current class
+        $reflection = new ReflectionClass($this);
+        
+        // Get the filename associated with the class
+        $filePath = $reflection->getFileName();
+        
+        return $filePath;
+    }
 }

@@ -708,7 +708,12 @@ class Route
 			// INCLUDING DOMAIN CHECKING //
 			return showErrorPage(self::PAGE_NOT_FOUND, 404);
 		} catch (Exception $e) {
-			return showErrorPage($e->getMessage() . showCallerInfo(self::$caller));
+			$eFile = $e->getFile();
+			return showErrorPage(
+				$eFile !== $this->dependencyInject->getClassFilePath() ? 
+				$e->getMessage() . showCallerInfo(self::$caller) : 
+				$e->getMessage()
+			);
 		}
 	}
 }
