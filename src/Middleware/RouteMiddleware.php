@@ -25,7 +25,7 @@ class RouteMiddleware
 		$middlewareObjects = [];
 		foreach ($middlewares as $key => $middleware) {
 			$middlewareData = explode(':', $middleware);
-			if (isset($middlewareData[0])) {
+			if (isset ($middlewareData[0])) {
 				$class = $middlewareData[0];
 				$middlewareClassString = strpos($class, 'JiJiHoHoCoCo\IchiRoute\Middleware') !== FALSE ? $class : $route->getBaseMiddlewarePath() . $class;
 				if (!class_exists($middlewareClassString)) {
@@ -38,10 +38,10 @@ class RouteMiddleware
 				if (!method_exists($middlewareClass, 'handle')) {
 					throw new Exception("You need to have 'handle' function in {$middlewareClassString}", 1);
 				}
-				if (isset($middlewareData[1])) {
+				if (isset ($middlewareData[1])) {
 					$middlewareParameters = [];
 					foreach (explode(',', $middlewareData[1]) as $middlewareParameter) {
-						if (isset($parameters[$middlewareParameter])) {
+						if (isset ($parameters[$middlewareParameter])) {
 							$middlewareParameters[] = $parameters[$middlewareParameter];
 						}
 					}
@@ -61,7 +61,11 @@ class RouteMiddleware
 			}
 		}
 		$firstMiddlewareObject = $middlewareObjects[0];
-		$reflectionMethod = new ReflectionMethod(get_class($firstMiddlewareObject), 'handle');
-		return $reflectionMethod->invokeArgs($firstMiddlewareObject, $firstMiddlewareObject->getParameters());
+		if ($firstMiddlewareObject != NULL) {
+			$reflectionMethod = new ReflectionMethod(get_class($firstMiddlewareObject), 'handle');
+			return $reflectionMethod->invokeArgs($firstMiddlewareObject, $firstMiddlewareObject->getParameters());
+		} else {
+			return NULL;
+		}
 	}
 }
