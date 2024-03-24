@@ -312,7 +312,7 @@ class Route
 		self::$caller = getCallerInfo();
 		$newMiddlewares = $middlewares;
 		$newMiddlewares[] = 'JiJiHoHoCoCo\IchiRoute\Middleware\DeleteMethodMiddleware';
-		return $this->makeRouteAction($route, $return, $newMiddlewares, 'POST');
+		return $this->makeRouteAction($route, $return, $newMiddlewares, 'DELETE');
 	}
 
 	public function head(string $route, $return, array $middlewares = [])
@@ -326,7 +326,7 @@ class Route
 		self::$caller = getCallerInfo();
 		$newMiddlewares = $middlewares;
 		$newMiddlewares[] = 'JiJiHoHoCoCo\IchiRoute\Middleware\PatchMethodMiddleware';
-		return $this->makeRouteAction($route, $return, $newMiddlewares, 'POST');
+		return $this->makeRouteAction($route, $return, $newMiddlewares, 'PATCH');
 	}
 
 	public function apiResource(string $route, $return, array $middlewares = [])

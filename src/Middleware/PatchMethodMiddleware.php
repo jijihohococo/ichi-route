@@ -5,11 +5,12 @@ namespace JiJiHoHoCoCo\IchiRoute\Middleware;
 class PatchMethodMiddleware extends MainMiddleware
 {
 
-	use MethodMiddlewareTrait;
-
 	public function handle()
 	{
-		return $this->check('PATCH');
+		if ($_SERVER['REQUEST_METHOD'] !== 'PATCH') {
+			return showErrorPage("404 - Method Not Found", 404);
+		}
+		return $this->next();
 	}
 
 

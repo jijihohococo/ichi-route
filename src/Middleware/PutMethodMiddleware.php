@@ -5,8 +5,6 @@ namespace JiJiHoHoCoCo\IchiRoute\Middleware;
 class PutMethodMiddleware extends MainMiddleware
 {
 
-	use MethodMiddlewareTrait;
-
 	public function handle()
 	{
 		if ($_SERVER['REQUEST_METHOD'] !== 'PUT') {

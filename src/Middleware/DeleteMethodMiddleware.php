@@ -5,11 +5,12 @@ namespace JiJiHoHoCoCo\IchiRoute\Middleware;
 class DeleteMethodMiddleware extends MainMiddleware
 {
 
-	use MethodMiddlewareTrait;
-
 	public function handle()
 	{
-		return $this->check('DELETE');
+		if ($_SERVER['REQUEST_METHOD'] !== 'DELETE') {
+			return showErrorPage("404 - Method Not Found", 404);
+		}
+		return $this->next();
 	}
 
 
