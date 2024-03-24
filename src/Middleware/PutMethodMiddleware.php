@@ -9,7 +9,10 @@ class PutMethodMiddleware extends MainMiddleware
 
 	public function handle()
 	{
-		return $this->check('PUT');
+		if ($_SERVER['REQUEST_METHOD'] !== 'PUT') {
+			return showErrorPage("404 - Method Not Found", 404);
+		}
+		return $this->next();
 	}
 
 

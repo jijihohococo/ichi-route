@@ -304,7 +304,7 @@ class Route
 		self::$caller = getCallerInfo();
 		$newMiddlewares = $middlewares;
 		$newMiddlewares[] = 'JiJiHoHoCoCo\IchiRoute\Middleware\PutMethodMiddleware';
-		return $this->makeRouteAction($route, $return, $newMiddlewares, 'POST');
+		return $this->makeRouteAction($route, $return, $newMiddlewares, 'PUT');
 	}
 
 	public function delete(string $route, $return, array $middlewares = [])
@@ -341,7 +341,7 @@ class Route
 			$this->get($route, $return . '@index', $middlewares);
 			$this->post($route . '/create', $return . '@save', $middlewares);
 			$this->get($route . '/{id}/edit', $return . '@edit', $middlewares);
-			$this->patch($route . '/{id}/edit', $return . '@update', $middlewares);
+			$this->put($route . '/{id}/edit', $return . '@update', $middlewares);
 			$this->delete($route . '/{id}/delete', $return . '@destroy', $middlewares);
 		} catch (Exception $e) {
 			return showErrorPage($e->getMessage() . showCallerInfo(self::$caller));
