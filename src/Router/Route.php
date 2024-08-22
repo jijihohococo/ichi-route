@@ -46,7 +46,7 @@ class Route
 		if (isset($this->keyValues[$key])) {
 			return $this->keyValues[$key];
 		}
-		return null;
+		return NULL;
 	}
 
 	public function getKeyValues()
@@ -68,9 +68,8 @@ class Route
 	{
 		if ($this->usedMultipleDomains == FALSE) {
 			return $this->host->getDefaultDomain();
-		} else {
-			return isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $this->host->getDefaultDomain();
 		}
+		return isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $this->host->getDefaultDomain();
 	}
 
 	public function setRedis($redis, int $redisCachedTime = NULL)
@@ -148,7 +147,8 @@ class Route
 				unset($parameters[0]);
 				$reflectionFunction = new ReflectionFunction($function);
 				return $reflectionFunction->invokeArgs($parameters);
-			} else {
+			}
+			if (!is_callable($parameters[0])) {
 				$calledFunction = explode('@', $parameters[0]);
 				if (isset($calledFunction[0]) && isset($calledFunction[1])) {
 					$className = $this->getBaseControllerPath() . $calledFunction[0];
@@ -167,9 +167,8 @@ class Route
 						}
 					}
 					return $this->dependencyInject->runClassFunction();
-				} else {
-					throw new Exception("You don't pass controller and function correctly", 1);
 				}
+				throw new Exception("You don't pass controller and function correctly", 1);
 			}
 		}
 	}
@@ -436,12 +435,13 @@ class Route
 	{
 		self::$caller = getCallerInfo();
 		$this->numberOfGroups++;
-		if ($this->currentGroup == null) {
+		if ($this->currentGroup == NULL) {
 			$this->groupURL[$this->numberOfGroups] = [
 				'middleware' => isset($data['middleware']) && is_array($data['middleware']) ? $data['middleware'] : NULL,
 				'url_group' => isset($data['url_group']) ? $data['url_group'] : NULL
 			];
-		} else {
+		}
+		if ($this->currentGroup !== NULL) {
 			return $this->childCall($data, $function);
 		}
 		$this->currentGroup = $this->numberOfGroups;
@@ -468,11 +468,14 @@ class Route
 	{
 		if (isset($data['middleware']) && is_array($data['middleware']) && is_array($oldMiddleware)) {
 			return array_merge($oldMiddleware, $data['middleware']);
-		} elseif (!isset($data['middleware']) && is_array($oldMiddleware)) {
+		}
+		if (!isset($data['middleware']) && is_array($oldMiddleware)) {
 			return $oldMiddleware;
-		} elseif (isset($data['middleware']) && !is_array($oldMiddleware)) {
+		}
+		if (isset($data['middleware']) && !is_array($oldMiddleware)) {
 			return $data['middleware'];
-		} elseif (!isset($data['middleware']) && !is_array($oldMiddleware)) {
+		}
+		if (!isset($data['middleware']) && !is_array($oldMiddleware)) {
 			return NULL;
 		}
 	}
@@ -481,11 +484,14 @@ class Route
 	{
 		if (isset($data['url_group']) && isset($oldURLGroup)) {
 			return $oldURLGroup . '/' . $data['url_group'];
-		} elseif (!isset($data['url_group']) && isset($oldURLGroup)) {
+		}
+		if (!isset($data['url_group']) && isset($oldURLGroup)) {
 			return $oldURLGroup;
-		} elseif (isset($data['url_group']) && !isset($oldURLGroup)) {
+		}
+		if (isset($data['url_group']) && !isset($oldURLGroup)) {
 			return $data['url_group'];
-		} elseif (!isset($data['url_group']) && !isset($oldURLGroup)) {
+		}
+		if (!isset($data['url_group']) && !isset($oldURLGroup)) {
 			return NULL;
 		}
 	}
@@ -540,7 +546,8 @@ class Route
 			$parameters[0] = $function;
 			ksort($parameters);
 			return $this->mainRun($parameters);
-		} else {
+		}
+		if (!empty($domainParameters)) {
 			$mergeParameters = array_merge($domainParameters, $parameters);
 			$newParameters[0] = $function;
 			$usedParameters = array_merge($newParameters, $mergeParameters);

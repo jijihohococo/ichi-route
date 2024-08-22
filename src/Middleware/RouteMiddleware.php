@@ -25,6 +25,9 @@ class RouteMiddleware
 		$middlewareObjects = [];
 		foreach ($middlewares as $key => $middleware) {
 			$middlewareData = explode(':', $middleware);
+			if (!isset($middlewareData[0])) {
+				throw new Exception("You don't pass the middleware class", 1);
+			}
 			if (isset ($middlewareData[0])) {
 				$class = $middlewareData[0];
 				$middlewareClassString = strpos($class, 'JiJiHoHoCoCo\IchiRoute\Middleware') !== FALSE ? $class : $route->getBaseMiddlewarePath() . $class;
@@ -56,8 +59,6 @@ class RouteMiddleware
 					$oldMiddlewareObject = $middlewareObjects[$key - 1];
 					$oldMiddlewareObject->setNext($middlewareClass);
 				}
-			} else {
-				throw new Exception("You don't pass the middleware class", 1);
 			}
 		}
 		$firstMiddlewareObject = $middlewareObjects[0];

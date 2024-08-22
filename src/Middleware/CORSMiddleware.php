@@ -24,7 +24,8 @@ class CORSMiddleware extends MainMiddleware
 		$availableSites = CORS::getAvailableSites();
 		if ($availableSites == '*') {
 			header('Access-Control-Allow-Origin: *');
-		} else {
+		}
+		if ($availableSites !== '*') {
 			$requestDomain = getRequestDomain();
 			foreach ($availableSites as $site) {
 				if ($site == $requestDomain) {
@@ -54,7 +55,8 @@ class CORSMiddleware extends MainMiddleware
 	{
 		if ($availableData == '*') {
 			header($function . ': ' . $availableData);
-		} elseif (is_array($availableData)) {
+		}
+		if (is_array($availableData)) {
 			$accessData = '';
 			$lastData = end($availableData);
 			foreach ($availableData as $key => $data) {

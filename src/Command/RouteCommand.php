@@ -235,11 +235,11 @@ class " . $createdFile . " extends MainMiddleware{
 			case $this->controllerCommandLine:
 				if ($this->resourceController == TRUE) {
 					return $this->makeResourceControllerContent($defaulFolder, $createdFile);
-				} elseif ($this->apiResourceController == TRUE) {
-					return $this->makeApiResourceControllerContent($defaulFolder, $createdFile);
-				} else {
-					return $this->makeControllerContent($defaulFolder, $createdFile);
 				}
+				if ($this->apiResourceController == TRUE) {
+					return $this->makeApiResourceControllerContent($defaulFolder, $createdFile);
+				}
+				return $this->makeControllerContent($defaulFolder, $createdFile);
 				break;
 		}
 	}
@@ -284,7 +284,8 @@ class " . $createdFile . " extends MainMiddleware{
 		if ((count($argv) == 3 || count($argv) == 4) && ($argv[1] == $this->middlewareCommandLine || $argv[1] == $this->controllerCommandLine)) {
 			if (isset($argv[3]) && $argv[3] == '--resource') {
 				$this->resourceController = TRUE;
-			} elseif (isset($argv[3]) && $argv[3] == '--api-resource') {
+			}
+			if (isset($argv[3]) && $argv[3] == '--api-resource') {
 				$this->apiResourceController = TRUE;
 			}
 			$command = $argv[1];
@@ -315,16 +316,19 @@ class " . $createdFile . " extends MainMiddleware{
 					file_put_contents($baseDir . '/' . $this->createdFile . '.php', $createdFileContent);
 					return $this->success($this->createdFile, $createdOption);
 
-				} elseif ($count == 1 && $inputFile[0] !== NULL && file_exists($baseDir . '/' . $inputFile[0] . '.php')) {
+				}
+				if ($count == 1 && $inputFile[0] !== NULL && file_exists($baseDir . '/' . $inputFile[0] . '.php')) {
 					$this->createdFile = $inputFile[0];
 
 					return $this->alreadyHave($this->createdFile, $createdOption);
 
-				} elseif ($count > 1 && file_exists($baseDir . '/' . implode('/', $inputFile) . '.php')) {
+				}
+				if ($count > 1 && file_exists($baseDir . '/' . implode('/', $inputFile) . '.php')) {
 					$this->createdFile = implode('/', $inputFile);
 					return $this->alreadyHave($this->createdFile, $createdOption);
 
-				} elseif ($count > 1 && !file_exists($baseDir . '/' . implode('/', $inputFile) . '.php')) {
+				}
+				if ($count > 1 && !file_exists($baseDir . '/' . implode('/', $inputFile) . '.php')) {
 					$this->createdFile = $inputFile[$count - 1];
 					unset($inputFile[$count - 1]);
 					$currentFolder = NULL;
