@@ -8,32 +8,35 @@ This package is Open Source According to [MIT license](LICENSE.md)
 
 ## Table Of Content
 
-* [Installation](#installation)
-* [Setting](#setting)
-	* [Apache](#apache)
-	* [Nginx](#nginx)
-* [Creating Controller](#creating-controller)
-* [Single Route](#single-route)
-	* [PATCH Method](#patch-method)
-	* [PUT Method](#put-method)
-	* [DELETE Method](#delete-method)
-* [Using Routes](#using-routes)
-* [Route Parameter](#route-parameter)
-* [Resource Route](#resource-route)
-* [Prefix Route](#prefix-route)
-* [Subdomain Route](#subdomain-route)
-	* [Single Subdomain](#single-subdomain)
-	* [Subdomain Parameter](#subdomain-parameter)
-* [Dependency Injection](#dependency-injection)
-* [Middleware](#middleware)
-* [CSRF Token Authentication](#csrf-token-authentication)
-* [API Request Authentication](#api-request-authentication)
-* [CORS](#cors)
-* [Caching Route](#caching-route)
-	* [Caching with Database](#caching-with-database)
-	* [Caching with Redis](#caching-with-redis)
-	* [Caching with Memcached](#caching-with-memcached)
-* [Error Page Customization](#error-page-customization)
+- [ICHI PHP ROUTER](#ichi-php-router)
+	- [License](#license)
+	- [Table Of Content](#table-of-content)
+	- [Installation](#installation)
+	- [Setting](#setting)
+		- [Apache](#apache)
+		- [Nginx](#nginx)
+	- [Creating Controller](#creating-controller)
+	- [Single Route](#single-route)
+		- [PATCH Method](#patch-method)
+		- [PUT Method](#put-method)
+		- [DELETE Method](#delete-method)
+	- [Using Routes](#using-routes)
+	- [Route Parameter](#route-parameter)
+	- [Resource Route](#resource-route)
+	- [Prefix Route](#prefix-route)
+	- [Subdomain Route](#subdomain-route)
+		- [Single Subdomain](#single-subdomain)
+		- [Subdomain Parameter](#subdomain-parameter)
+	- [Dependency Injection](#dependency-injection)
+	- [Middleware](#middleware)
+	- [CSRF Token Authentication](#csrf-token-authentication)
+	- [API Request Authentication](#api-request-authentication)
+	- [CORS](#cors)
+	- [Caching Route](#caching-route)
+		- [Caching with Database](#caching-with-database)
+		- [Caching with Redis](#caching-with-redis)
+		- [Caching with Memcached](#caching-with-memcached)
+	- [Error Page Customization](#error-page-customization)
 
 
 ## Installation
@@ -111,7 +114,7 @@ The default file folder is "app/Controllers". So after making command, the contr
 
 ```php
 
-$routeCommand=new RouteCommand;
+$routeCommand = new RouteCommand;
 $routeCommand->setPath('new_app/Controllers');
 $routeCommand->run(__DIR__,$argv);
 
@@ -440,7 +443,7 @@ You must set your main domain name before declaring routes if you want to use su
 ```php
 use JiJiHoHoCoCo\IchiRoute\Router\Route;
 
-$route=new Route;
+$route = new Route;
 $route->setDefaultDomain('your_main_domain.com');
 
 ```
@@ -679,7 +682,7 @@ The default path for observer is "app/Middlewares". You can also change this in 
 
 ```php
 
-$routeCommand=new RouteCommand;
+$routeCommand = new RouteCommand;
 $routeCommand->setResourcePath('new_app/Middlewares');
 $routeCommand->run(__DIR__,$argv);
 
@@ -817,7 +820,7 @@ use JiJiHoHoCoCo\IchiRoute\Router\Route;
 
 generateCSRFToken();
 
-$route=new Route;
+$route = new Route;
 $route->post('items','App\ItemController@create',[
 'JiJiHoHoCoCo\IchiRoute\Middleware\CSRFMiddleware'
 ]);
@@ -831,7 +834,7 @@ use JiJiHoHoCoCo\IchiRoute\Router\Route;
 
 generateCSRFToken();
 
-$route=new Route;
+$route = new Route;
 $route->group(['middleare' => 
 	['JiJiHoHoCoCo\IchiRoute\Middleware\CSRFMiddleware'] ],function(){
 	$this->post('items','App\ItemController@create');
@@ -1023,7 +1026,7 @@ If you want to show more specific error according to your HTTP response code, yo
 
 use JiJiHoHoCoCo\IchiRoute\UI\ErrorPage;
 
-$errorPage=function($message,$code){
+$errorPage = function($message,$code){
 		return <<<HTML
 			<html>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
