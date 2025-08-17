@@ -55,26 +55,11 @@ class RouteCommand
 namespace " . $this->getNamespace($defaulFolder) . ";
 use JiJiHoHoCoCo\IchiRoute\Controller\BaseController;
 
-
-class " . $createdFile . " extends BaseController {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-}";
+class " . $createdFile . " extends BaseController
+{
+	//
+}
+";
 	}
 
 
@@ -86,41 +71,35 @@ class " . $createdFile . " extends BaseController {
 namespace " . $this->getNamespace($defaulFolder) . ";
 use JiJiHoHoCoCo\IchiRoute\Controller\BaseController;
 
+class " . $createdFile . " extends BaseController
+{
 
-class " . $createdFile . " extends BaseController{
-
-
-	public function index(){
-
-
+	public function index()
+	{
+		//
 	}
 
-	public function save(){
-		
-
+	public function save()
+	{
+		//
 	}
 
-
-	public function edit(" . $variable . "){
-
-
+	public function edit(" . $variable . ")
+	{
+		//
 	}
 
-
-	public function update(" . $variable . "){
-
-
+	public function update(" . $variable . ")
+	{
+		//
 	}
 
-
-	public function destroy(" . $variable . "){
-
-
+	public function destroy(" . $variable . ")
+	{
+		//
 	}
-
-
-
-}";
+}
+";
 
 	}
 
@@ -132,48 +111,40 @@ class " . $createdFile . " extends BaseController{
 namespace " . $this->getNamespace($defaulFolder) . ";
 use JiJiHoHoCoCo\IchiRoute\Controller\BaseController;
 
+class " . $createdFile . " extends BaseController
+{
 
-class " . $createdFile . " extends BaseController{
-
-
-	public function index(){
-
-
+	public function index()
+	{
+		//
 	}
 
-
-
-	public function create(){
-
-
+	public function create()
+	{
+		//
 	}
 
-	public function save(){
-		
-
+	public function save()
+	{	
+		//
 	}
 
-
-	public function edit(" . $variable . "){
-
-
+	public function edit(" . $variable . ")
+	{
+		//
 	}
 
-
-	public function update(" . $variable . "){
-
-
+	public function update(" . $variable . ")
+	{
+		//
 	}
 
-
-	public function destroy(" . $variable . "){
-
-
+	public function destroy(" . $variable . ")
+	{
+		//
 	}
-
-
-
-}";
+}
+";
 
 	}
 
@@ -185,14 +156,13 @@ class " . $createdFile . " extends BaseController{
 namespace " . $this->getNamespace($defaulFolder) . ";
 use JiJiHoHoCoCo\IchiRoute\Middleware\MainMiddleware;
 
-class " . $createdFile . " extends MainMiddleware{
+class " . $createdFile . " extends MainMiddleware
+{
 
-	public function handle(){
-
-
+	public function handle()
+	{
 		return " . $next . "
 	}
-
 }
 ";
 	}
