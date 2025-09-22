@@ -96,7 +96,6 @@ require __DIR__.'/vendor/autoload.php';
 
 use JiJiHoHoCoCo\IchiRoute\Command\RouteCommand;
 
-
 $routeCommand=new RouteCommand;
 $routeCommand->run(__DIR__,$argv);
 
@@ -417,7 +416,6 @@ You can use prefix route to make groups
 
 ```php
 $route->group(['url_group'=>'admin'],function(){
-	
 	$this->get('items','App\Controllers\ItemController@getItems');
 	$this->get('brands','App\Controllers\BrandController@getBrands');
 });
