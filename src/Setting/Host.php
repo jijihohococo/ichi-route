@@ -4,17 +4,15 @@ namespace JiJiHoHoCoCo\IchiRoute\Setting;
 
 class Host
 {
+    private $defaultDomain = 'localhost';
 
-	private $defaultDomain = 'localhost';
+    public function getDefaultDomain()
+    {
+        return $this->defaultDomain;
+    }
 
-	public function getDefaultDomain()
-	{
-		return $this->defaultDomain;
-	}
-
-	public function setDefaultDomain(string $domain)
-	{
-		$this->defaultDomain = $domain;
-	}
-
+    public function setDefaultDomain(string $domain)
+    {
+        $this->defaultDomain = $domain;
+    }
 }
