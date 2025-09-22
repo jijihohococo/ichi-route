@@ -4,7 +4,10 @@ namespace JiJiHoHoCoCo\IchiRoute\Setting;
 
 class CORS
 {
-    private static $availableSites, $availableMethods, $availableHeaders, $availableSitesRegex;
+    private static $availableSites;
+    private static $availableMethods;
+    private static $availableHeaders;
+    private static $availableSitesRegex;
     private static $maxAge = 0;
     private static $allowedCredential = false;
 

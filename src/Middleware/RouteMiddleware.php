@@ -20,7 +20,7 @@ class RouteMiddleware
         return $this->domainParameters;
     }
 
-    public function check($middlewares = [], $route, $parameters = [])
+    public function check($middlewares , $route, $parameters = [])
     {
         $middlewares = array_unique($middlewares);
         $middlewareObjects = [];
