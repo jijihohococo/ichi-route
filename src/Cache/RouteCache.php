@@ -6,7 +6,8 @@ use PDO;
 
 class RouteCache
 {
-    public $pdo, $pdoCachedTime;
+    public $pdo;
+    public $pdoCachedTime;
 
     public function __construct(PDO $pdo, int $pdoCachedTime = null)
     {

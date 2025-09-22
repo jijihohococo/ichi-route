@@ -281,7 +281,7 @@ class Route
         return $this->currentGroup !== null && isset($this->groupURL[$this->currentGroup]);
     }
 
-    private function makeRouteAction(string $route, $return, array $middlewares = [], $method)
+    private function makeRouteAction(string $route, $return, array $middlewares, $method)
     {
         if (!is_string($return) && !is_callable($return)) {
             throw new Exception("You can use controller class with function name or closure function ", 1);
