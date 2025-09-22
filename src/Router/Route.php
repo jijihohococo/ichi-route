@@ -15,13 +15,25 @@ class Route
     private $groupURL = [];
     private $currentGroup;
     private $numberOfGroups = 0;
-    private $baseControllerPath, $baseMiddlewarePath;
+    private $baseControllerPath;
+	private $baseMiddlewarePath;
 
-    private $dependencyInject, $routeMiddleware, $defaultMiddlewares;
+    private $dependencyInject;
+	private $routeMiddleware;
+	private $defaultMiddlewares;
 
-    private $redis, $redisCachedTime, $memcached, $memcachedCachedTime, $pdo, $pdoCachedTime, $cacheMode;
+    private $redis;
+	private $redisCachedTime;
+	private $memcached;
+	private $memcachedCachedTime;
+	private $pdo;
+	private $pdoCachedTime;
+	private $cacheMode;
 
-    private $host, $currentDomain, $domains, $parameterDomains;
+    private $host;
+	private $currentDomain;
+	private $domains;
+	private $parameterDomains;
     private $usedMultipleDomains = false;
     private $keyValues = [];
 
