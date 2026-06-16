@@ -17,11 +17,9 @@ class Route
     private $numberOfGroups = 0;
     private $baseControllerPath;
     private $baseMiddlewarePath;
-
     private $dependencyInject;
     private $routeMiddleware;
     private $defaultMiddlewares;
-
     private $redis;
     private $redisCachedTime;
     private $memcached;
@@ -29,18 +27,14 @@ class Route
     private $pdo;
     private $pdoCachedTime;
     private $cacheMode;
-
     private $host;
     private $currentDomain;
     private $domains;
     private $parameterDomains;
     private $usedMultipleDomains = false;
     private $keyValues = [];
-
     private static $caller = [];
-
     const PAGE_NOT_FOUND = "404 - URL is not found.";
-
 
     public function __construct()
     {
@@ -399,7 +393,6 @@ class Route
 
     private function checkMiddleware($routes, $serverURL, $parameters = [])
     {
-
         if ($routes[$serverURL]['middleware'] !== null && !empty($routes[$serverURL]['middleware'])) {
             return $this->routeMiddleware->check($routes[$serverURL]['middleware'], $this, $parameters);
         }
@@ -546,7 +539,6 @@ class Route
 
     private function mainRun($parameters)
     {
-
         $reflectionMethod = new ReflectionMethod((string) get_class($this), 'callingRequest');
         $reflectionMethod->setAccessible(true);
         return $reflectionMethod->invokeArgs($this, $parameters);
@@ -569,12 +561,9 @@ class Route
 
     private function runDomain($domain, array $domainParameters = [])
     {
-
         $serverURL = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
         $method = $_SERVER['REQUEST_METHOD'];
         $requestMethod = '{' . $method . '}';
-
-
         $newServerURL = null;
 
         $redis = $this->getRedis();

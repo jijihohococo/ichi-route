@@ -8,18 +8,13 @@ class RouteCommand
 {
     private $middlewarePath = 'app/Middlewares';
     private $controllerPath = 'app/Controllers';
-
-
     private $middlewareCommandLine = 'make:middleware';
     private $controllerCommandLine = 'make:controller';
-
     private $resourceController = false;
     private $apiResourceController = false;
-
     private $green = "\033[0;32m";
     private $red = "\033[01;31m";
     private $end = " \033[0m";
-
     private $createdFile;
 
     public function setMiddlewarePath(string $middlewarePath)
@@ -183,7 +178,6 @@ class " . $createdFile . " extends MainMiddleware
             case $this->middlewareCommandLine:
                 return $this->getMiddlewarePath();
                 break;
-
 
             case $this->controllerCommandLine:
                 return $this->getControllerPath();

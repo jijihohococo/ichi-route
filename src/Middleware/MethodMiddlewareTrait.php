@@ -2,8 +2,6 @@
 
 namespace JiJiHoHoCoCo\IchiRoute\Middleware;
 
-use JiJiHoHoCoCo\IchiRoute\UI\ErrorPage;
-
 trait MethodMiddlewareTrait
 {
     public function check(string $key)
