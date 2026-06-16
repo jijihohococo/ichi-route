@@ -8,18 +8,13 @@ class RouteCommand
 {
     private $middlewarePath = 'app/Middlewares';
     private $controllerPath = 'app/Controllers';
-
-
     private $middlewareCommandLine = 'make:middleware';
     private $controllerCommandLine = 'make:controller';
-
     private $resourceController = false;
     private $apiResourceController = false;
-
     private $green = "\033[0;32m";
     private $red = "\033[01;31m";
     private $end = " \033[0m";
-
     private $createdFile;
 
     public function setMiddlewarePath(string $middlewarePath)
@@ -42,16 +37,16 @@ class RouteCommand
         return $this->controllerPath;
     }
 
-    private function getNamespace(string $defaulFolder)
+    private function getNamespace(string $defaultFolder)
     {
-        return str_replace('/', '\\', ucfirst($defaulFolder));
+        return str_replace('/', '\\', ucfirst($defaultFolder));
     }
 
-    private function makeControllerContent(string $defaulFolder, string $createdFile)
+    private function makeControllerContent(string $defaultFolder, string $createdFile)
     {
         return "<?php 
 
-namespace " . $this->getNamespace($defaulFolder) . ";
+namespace " . $this->getNamespace($defaultFolder) . ";
 use JiJiHoHoCoCo\IchiRoute\Controller\BaseController;
 
 class " . $createdFile . " extends BaseController
@@ -184,28 +179,27 @@ class " . $createdFile . " extends MainMiddleware
                 return $this->getMiddlewarePath();
                 break;
 
-
             case $this->controllerCommandLine:
                 return $this->getControllerPath();
                 break;
         }
     }
 
-    private function checkContent(string $command, string $defaulFolder, string $createdFile)
+    private function checkContent(string $command, string $defaultFolder, string $createdFile)
     {
         switch ($command) {
             case $this->middlewareCommandLine:
-                return $this->makeMiddlewareContent($defaulFolder, $createdFile);
+                return $this->makeMiddlewareContent($defaultFolder, $createdFile);
                 break;
 
             case $this->controllerCommandLine:
                 if ($this->resourceController == true) {
-                    return $this->makeResourceControllerContent($defaulFolder, $createdFile);
+                    return $this->makeResourceControllerContent($defaultFolder, $createdFile);
                 }
                 if ($this->apiResourceController == true) {
-                    return $this->makeApiResourceControllerContent($defaulFolder, $createdFile);
+                    return $this->makeApiResourceControllerContent($defaultFolder, $createdFile);
                 }
-                return $this->makeControllerContent($defaulFolder, $createdFile);
+                return $this->makeControllerContent($defaultFolder, $createdFile);
                 break;
         }
     }
@@ -277,9 +271,8 @@ class " . $createdFile . " extends MainMiddleware
 
                 if ($count == 1 && $inputFile[0] !== null && !file_exists($baseDir . '/' . $inputFile[0] . '.php')) {
                     $this->createdFile = $inputFile[0];
-                    fopen($baseDir . '/' . $this->createdFile . '.php', 'w') or die('Unable to create ' . $createdOption);
                     $createdFileContent = $this->checkContent($command, $defaulFolder, $this->createdFile);
-                    file_put_contents($baseDir . '/' . $this->createdFile . '.php', $createdFileContent);
+                    file_put_contents($baseDir . '/' . $this->createdFile . '.php', $createdFileContent) or die('Unable to create ' . $createdOption);
                     return $this->success($this->createdFile, $createdOption);
                 }
                 if ($count == 1 && $inputFile[0] !== null && file_exists($baseDir . '/' . $inputFile[0] . '.php')) {
@@ -304,9 +297,8 @@ class " . $createdFile . " extends MainMiddleware
                         }
                     }
 
-                    fopen($currentFolder . '/' . $this->createdFile . '.php', 'w') or die('Unable to create ' . $createdOption);
                     $createdFileContent = $this->checkContent($command, $newCreatedFolder, $this->createdFile);
-                    file_put_contents($currentFolder . '/' . $this->createdFile . '.php', $createdFileContent);
+                    file_put_contents($currentFolder . '/' . $this->createdFile . '.php', $createdFileContent) or die('Unable to create ' . $createdOption);
                     return $this->success($this->createdFile, $createdOption);
                 }
             } catch (Exception $e) {

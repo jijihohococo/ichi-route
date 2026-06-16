@@ -7,7 +7,6 @@ use ReflectionMethod;
 abstract class MainMiddleware
 {
     public $next;
-
     public $parameters = [];
     public $domainParameters = [];
 
@@ -36,10 +35,6 @@ abstract class MainMiddleware
     {
         return $this->parameters;
     }
-
-
-
-
 
     public function next()
     {

@@ -97,7 +97,7 @@ class DependencyInject
     {
         $objects = [];
         $interface = 'Interface';
-        foreach ($parameters as $key => $parameter) {
+        foreach ($parameters as $parameter) {
             $type = str_replace($interface, '', (string) $parameter->getType());
             if (!interface_exists($type . $interface)) {
                 throw new Exception($parameter . " Interface is not exist.", 1);

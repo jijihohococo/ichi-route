@@ -8,7 +8,6 @@ class CORSMiddleware extends MainMiddleware
 {
     public function handle()
     {
-
         $this->getAccessControlAllowOrigin();
         $this->getAccessControlMethods();
         $this->getAccessControlHeaders();
@@ -57,7 +56,7 @@ class CORSMiddleware extends MainMiddleware
         if (is_array($availableData)) {
             $accessData = '';
             $lastData = end($availableData);
-            foreach ($availableData as $key => $data) {
+            foreach ($availableData as $data) {
                 $accessData .= $lastData == $data ? ' ' . $data : ' ' . $data . ',';
             }
             header($function . ': ' . $accessData);
