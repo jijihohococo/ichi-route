@@ -25,12 +25,11 @@ class ErrorPage
       font-family: 'Arial', sans-serif;
       margin: 0;
       padding: 0;
-      background-color: #f4f4f4;
     }
 
     header {
       background-color: #333;
-      color: 0000;
+      color: #FFFFFF;
       text-align: center;
       padding: 1rem;
     }
@@ -39,18 +38,7 @@ class ErrorPage
       max-width: 800px;
       margin: 2rem auto;
       padding: 1rem;
-      background-color: 0000;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-
-    footer {
-      background-color: #333;
-      color: 0000;
-      text-align: center;
-      padding: 1rem;
-      position: fixed;
-      bottom: 0;
-      width: 100%;
     }
 
     /* Media queries for responsive design */

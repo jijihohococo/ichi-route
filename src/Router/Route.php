@@ -170,12 +170,12 @@ class Route
                     }
                     $functionName = $calledFunction[1];
                     unset($parameters[0]);
-                    $routeKeyalues = $this->getKeyValues();
+                    $routeKeyValues = $this->getKeyValues();
                     $this->dependencyInject->setCreatedClass($className);
                     $this->dependencyInject->setFunctionName($functionName);
                     $this->dependencyInject->setFunctionParameters($parameters);
-                    if (!empty($routeKeyalues)) {
-                        foreach ($routeKeyalues as $key => $value) {
+                    if (!empty($routeKeyValues)) {
+                        foreach ($routeKeyValues as $key => $value) {
                             $this->dependencyInject->setKeyValue($key, $value);
                         }
                     }
@@ -646,9 +646,9 @@ class Route
                 //  // NO ROUTE //
                 return showErrorPage(self::PAGE_NOT_FOUND, 404);
             }
-            $avaialbleRoute = array_filter($matches);
-            unset($avaialbleRoute[0]);
-            foreach ($avaialbleRoute as $key => $currentRoute) {
+            $availableRoute = array_filter($matches);
+            unset($availableRoute[0]);
+            foreach ($availableRoute as $key => $currentRoute) {
                 $avaialbleKey = $key;
             }
             $newServerURL = $parameterRouteKeys[$avaialbleKey - 1];

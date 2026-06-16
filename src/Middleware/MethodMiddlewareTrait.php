@@ -10,7 +10,7 @@ trait MethodMiddlewareTrait
     {
         $methodNotFound = "404 - Method Not Found";
         if (!isset($_REQUEST['__method']) || (isset($_REQUEST['__method']) && $_REQUEST['__method'] !== $key)) {
-            return showErrorPage("404 - Method Not Found", 404);
+            return showErrorPage($methodNotFound, 404);
         }
         return $this->next();
     }
