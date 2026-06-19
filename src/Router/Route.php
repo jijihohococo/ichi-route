@@ -659,7 +659,6 @@ class Route
                     ${$this->cacheMode}->set($saveRoute, $newServerURL, $this->{$this->cacheMode . 'CachedTime'});
                 }
 
-
                 $availableParameterRoute = $domain['parameterRoutes'][$newServerURL];
 
                 $check = $this->checkMiddleware($domain['parameterRoutes'], $newServerURL, $middlewareParameters);
