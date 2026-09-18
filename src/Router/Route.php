@@ -6,9 +6,10 @@ use JiJiHoHoCoCo\IchiRoute\Container\DependencyInject;
 use JiJiHoHoCoCo\IchiRoute\Middleware\RouteMiddleware;
 use JiJiHoHoCoCo\IchiRoute\Cache\RouteCache;
 use JiJiHoHoCoCo\IchiRoute\Setting\Host;
-use ReflectionMethod,
-
-PDO, ReflectionFunction, Exception;
+use ReflectionMethod;
+use PDO;
+use ReflectionFunction;
+use Exception;
 
 class Route
 {
