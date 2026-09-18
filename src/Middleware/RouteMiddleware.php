@@ -2,9 +2,8 @@
 
 namespace JiJiHoHoCoCo\IchiRoute\Middleware;
 
-use ReflectionMethod,
-
-Exception;
+use ReflectionMethod;
+use Exception;
 
 class RouteMiddleware
 {

@@ -2,9 +2,8 @@
 
 namespace JiJiHoHoCoCo\IchiRoute\Container;
 
-use ReflectionClass,
-
-Exception;
+use ReflectionClass;
+use Exception;
 
 class DependencyInject
 {
