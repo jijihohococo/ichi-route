@@ -47,6 +47,7 @@ class RouteCommand
         return "<?php 
 
 namespace " . $this->getNamespace($defaultFolder) . ";
+
 use JiJiHoHoCoCo\IchiRoute\Controller\BaseController;
 
 class " . $createdFile . " extends BaseController
@@ -63,6 +64,7 @@ class " . $createdFile . " extends BaseController
         return "<?php
 
 namespace " . $this->getNamespace($defaultFolder) . ";
+
 use JiJiHoHoCoCo\IchiRoute\Controller\BaseController;
 
 class " . $createdFile . " extends BaseController
@@ -102,6 +104,7 @@ class " . $createdFile . " extends BaseController
         return "<?php
 
 namespace " . $this->getNamespace($defaultFolder) . ";
+
 use JiJiHoHoCoCo\IchiRoute\Controller\BaseController;
 
 class " . $createdFile . " extends BaseController
@@ -146,6 +149,7 @@ class " . $createdFile . " extends BaseController
         return "<?php
 
 namespace " . $this->getNamespace($defaultFolder) . ";
+
 use JiJiHoHoCoCo\IchiRoute\Middleware\MainMiddleware;
 
 class " . $createdFile . " extends MainMiddleware
