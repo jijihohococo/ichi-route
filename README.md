@@ -37,6 +37,7 @@ This package is Open Source According to [MIT license](LICENSE.md)
 		- [Caching with Redis](#caching-with-redis)
 		- [Caching with Memcached](#caching-with-memcached)
 	- [Error Page Customization](#error-page-customization)
+	- [Supported PHP Versions](#supported-php-versions)
 
 
 ## Installation
@@ -1071,3 +1072,7 @@ ErrorPage::setErrorPage($errorPage);
 ```
 
 In your customized function, you must have "$message" and "$code" parameters
+
+## Supported PHP Versions
+
+7.3, 7.4, 8.0, 8.1, 8.2, 8.3, 8.4, 8.5
