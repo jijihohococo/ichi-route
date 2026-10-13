@@ -96,7 +96,7 @@ require __DIR__.'/vendor/autoload.php';
 
 use JiJiHoHoCoCo\IchiRoute\Command\RouteCommand;
 
-$routeCommand=new RouteCommand;
+$routeCommand = new RouteCommand;
 $routeCommand->run(__DIR__,$argv);
 
 ```
@@ -128,19 +128,21 @@ You can add routes with "get","post","put","delete" and "head" functions.
 You can add route with closure function or the function of controller class.
 
 <i>With closure function</i>
+
 ```php
 use JiJiHoHoCoCo\IchiRoute\Router\Route;
 
-$route=new Route;
-$route->get('items',function(){
+$route = new Route;
+$route->get('items', function(){
 	echo "show items";
 });
 ```
 
 <i>With Controller class</i>
+
 ```php
 
-$route->get('items','App\Controllers\ItemController@show');
+$route->get('items', 'App\Controllers\ItemController@show');
 
 ```
 <b>You must autoload your the controller folder before using the route function in your composer.json</b>
@@ -188,7 +190,7 @@ In your route
 
 ```php
 
-$route->patch('items','App\Controllers\ItemController@show');
+$route->patch('items', 'App\Controllers\ItemController@show');
 
 ```
 
@@ -211,7 +213,7 @@ In your route
 
 ```php
 
-$route->put('items','App\Controllers\ItemController@show');
+$route->put('items', 'App\Controllers\ItemController@show');
 
 ```
 
@@ -234,7 +236,7 @@ In your route
 
 ```php
 
-$route->delete('items','App\Controllers\ItemController@show');
+$route->delete('items', 'App\Controllers\ItemController@show');
 
 ```
 
@@ -264,7 +266,7 @@ In many cases, you have a time to make route parameters
 
 ```php
 
-$route->get('items/show/{id}','App\Controllers\ItemController@show');
+$route->get('items/show/{id}', 'App\Controllers\ItemController@show');
 
 ```
 
@@ -273,23 +275,22 @@ In your controller class
 ```php
 namespace App\Controllers;
 
-class ItemController{
+class ItemController
+{
 
 	// 'items/show/{id}' //
-	public function show($id){
+	public function show($id)
+	{
 		echo $id;
 	}
 }
-
 ```
-
-
 
 You can also do with closure function
 
 ```php
 
-$route->get('items/show/{id}',function($id){
+$route->get('items/show/{id}', function($id){
 	echo $id;
 })
 
@@ -318,7 +319,7 @@ You can CRUD routes with one route method
 
 ```php
 
-$route->resource('items','App\Controllers\ItemController');
+$route->resource('items', 'App\Controllers\ItemController');
 
 ```
 
@@ -327,45 +328,50 @@ In your controller class
 ```php
 namespace App\Controllers;
 
-class ItemController{
+class ItemController
+{
 
 	// GET METHOD //
 	// 'items' //
-	public function index(){
+	public function index()
+	{
 
 	}
 
 	// GET METHOD //
 	// 'items/create' //
-	public function create(){
+	public function create()
+	{
 
 	}
 
 	// POST METHOD //
 	// 'items/create' //
-	public function save(){
+	public function save()
+	{
 
 	}
 
 	// GET METHOD //
 	// 'items/{id}/edit'
-	public function edit($id){
+	public function edit($id)
+	{
 
 	}
 
 	// PUT METHOD //
 	// 'items/{id}/edit' //
-	public function update($id){
+	public function update($id)
+	{
 
 	}
 
 	// DELETE METHOD //
 	// 'items/{id}/destroy' //
-	public function destroy($id){
+	public function destroy($id)
+	{
 
 	}
-
-
 }
 ```
 
@@ -415,7 +421,7 @@ After running route function, the routes (URL) are able to run
 You can use prefix route to make groups
 
 ```php
-$route->group(['url_group'=>'admin'],function(){
+$route->group(['url_group' => 'admin'], function(){
 	$this->get('items','App\Controllers\ItemController@getItems');
 	$this->get('brands','App\Controllers\BrandController@getBrands');
 });
@@ -455,7 +461,7 @@ You can use all route functions within "domain()" function
 
 ```php
 
-$route->domain('your_subdomain.com',function(){
+$route->domain('your_subdomain.com', function(){
 	$this->get('items','Subdomain/ItemController@get');
 });
 
@@ -479,9 +485,10 @@ Parameters are embrace with "{" and "}" as route parameters
 You must pass subdomain parameters into the closure function or class's function
 
 <i>Class's function</i>
+
 ```php
 
-$route->domain('{subdomain}.com',function(){
+$route->domain('{subdomain}.com', function(){
 	$this->get('items','Subdomain/ItemController@get');
 });
 ```
@@ -490,19 +497,22 @@ $route->domain('{subdomain}.com',function(){
 
 namespace App\Controllers\Subdomain;
 
-class ItemController{
+class ItemController
+{
 
-	public function get($subdomain){
+	public function get($subdomain)
+	{
 
 	}
 }
 ```
 
 <i>Closure function</i>
+
 ```php
 
-$route->domain('{subdomain}.com',function(){
-	$this->get('items',function($subdomain){
+$route->domain('{subdomain}.com', function(){
+	$this->get('items', function($subdomain){
 
 	});
 })
@@ -511,30 +521,33 @@ $route->domain('{subdomain}.com',function(){
 <b>If you want to use multiple subdomain parameters, use '.' between parameters and string</b>
 
 <i>Class's function</i>
+
 ```php
 
-$route->domain('{subdomain}.{person}.com',function(){
+$route->domain('{subdomain}.{person}.com', function(){
 	$this->get('items','Subdomain/ItemController@get');
 });
 ```
 
 ```php
-
 namespace App\Controllers\Subdomain;
 
-class ItemController{
+class ItemController
+{
 
-	public function get($subdomain,$person){
+	public function get($subdomain,$person)
+	{
 
 	}
 }
 ```
 
 <i>Closure function</i>
+
 ```php
 
-$route->domain('{subdomain}.{person}.com',function(){
-	$this->get('items',function($subdomain,$person){
+$route->domain('{subdomain}.{person}.com', function(){
+	$this->get('items', function($subdomain,$person){
 
 	});
 });
@@ -545,29 +558,32 @@ $route->domain('{subdomain}.{person}.com',function(){
 
 
 <i>Class's function</i>
+
 ```php
 
-$route->domain('{subdomain}.{person}.com',function(){
-	$this->get('items/{id}','Subdomain/ItemController@get');
+$route->domain('{subdomain}.{person}.com', function(){
+	$this->get('items/{id}', 'Subdomain/ItemController@get');
 });
 ```
 
 ```php
-
 namespace App\Controllers\Subdomain;
 
-class ItemController{
+class ItemController
+{
 
-	public function get($subdomain,$person,$id){
+	public function get($subdomain,$person,$id)
+	{
 
 	}
 }
 ```
 
 <i>Closure function</i>
+
 ```php
-$route->domain('{subdomain}.{person}.com',function(){
-	$this->get('items/{id}',function($subdomain,$person,$id){
+$route->domain('{subdomain}.{person}.com', function(){
+	$this->get('items/{id}', function($subdomain, $person, $id){
 
 	});
 });
@@ -576,16 +592,18 @@ $route->domain('{subdomain}.{person}.com',function(){
 If you want to get subdomain parameters in your middleware which are under that subdomain routes
 
 In your middleware class
-```php
 
+```php
 namespace App\Middlewares;
 
 use JiJiHoHoCoCo\IchiRoute\Middleware\MainMiddleware;
 
-class TestMiddleware extends MainMiddleware{
+class TestMiddleware extends MainMiddleware
+{
 
-	public function handle(){
-		$subdomainParameters=$this->getDomainParameters();
+	public function handle()
+	{
+		$subdomainParameters = $this->getDomainParameters();
 	}
 }
 ```
@@ -613,10 +631,13 @@ In your controller class
 namespace App\Controllers;
 
 use App\Repositories\ItemRepositoryInteface;
-class ItemController{
+
+class ItemController
+{
 
 	public $item;
-	public function __construct(ItemRepositoryInteface $item){
+	public function __construct(ItemRepositoryInteface $item)
+	{
 		$this->item=$item;
 	}
 }
@@ -626,13 +647,16 @@ You can also add another dependency injection in your repositories.
 ```php
 namespace App\Repositories;
 
-use App\Repositories\{ItemRepositoryInteface,BrandRepositoryInterface};
+use App\Repositories\ItemRepositoryInteface;
+use App\Repositories\BrandRepositoryInterface;
 
-class ItemRepository implements ItemRepositoryInteface{
+class ItemRepository implements ItemRepositoryInteface
+{
 
 	public $brand;
 
-	public function __construct(BrandRepositoryInterface $brand){
+	public function __construct(BrandRepositoryInterface $brand)
+	{
 		$this->brand=$brand;
 	}
 }
@@ -644,7 +668,7 @@ You can add middlewares in single route like below
 
 ```php
 
-$route->get('order','App\Controllers\OrderController@order',[
+$route->get('order', 'App\Controllers\OrderController@order', [
 'App\Middlewares\OrderMiddleware'
 ]);
 
@@ -652,15 +676,17 @@ $route->get('order','App\Controllers\OrderController@order',[
 You must delcare middleware class
 
 <b>Your middleware classes must be autoloaded in composer as we mentioned before</b>
-```php
 
+```php
 namespace App\Middlewares;
 
 use JiJiHoHoCoCo\IchiRoute\Middleware\MainMiddleware;
 
-class OrderMiddleware extends MainMiddleware{
+class OrderMiddleware extends MainMiddleware
+{
 
-	public function handle(){
+	public function handle()
+	{
 		//--check your business logic--//
 		return $this->next();
 	}
@@ -690,7 +716,7 @@ You can add multiple middleware classes
 
 ```php
 
-$route->get('order','App\Controllers\OrderController@order',[
+$route->get('order', 'App\Controllers\OrderController@order', [
 	'App\Middlewares\LoginMiddleware',
 	'App\Middlewares\OrderMiddleware'
 ]);
@@ -702,7 +728,7 @@ You can add parameters in middleware with your route parameters
 
 ```php
 
-$route->get('items/{id}','App\Controllers\ItemController@getItems',[
+$route->get('items/{id}', 'App\Controllers\ItemController@getItems', [
 	'App\Middlewares\CheckItemMiddleware:id'
 ]);
 
@@ -715,9 +741,11 @@ namespace App\Middlewares;
 
 use JiJiHoHoCoCo\IchiRoute\Middleware\MainMiddleware;
 
-class CheckItemMiddleware extends MainMiddleware{
+class CheckItemMiddleware extends MainMiddleware
+{
 
-	public function handle($id){
+	public function handle($id)
+	{
 		//--check your business logic--//
 		return $this->next();
 	}
@@ -730,7 +758,7 @@ You can add multiple parameters in middleware with your route parameters
 ```php
 
 $route->get('items/{id}/{stock_id}',
-	'App\Controllers\ItemController@getItems',[
+	'App\Controllers\ItemController@getItems', [
 	'App\Middlewares\CheckItemMiddleware:id,stock_id'
 ]);
 
@@ -742,9 +770,11 @@ namespace App\Middlewares;
 
 use JiJiHoHoCoCo\IchiRoute\Middleware\MainMiddleware;
 
-class CheckItemMiddleware extends MainMiddleware{
+class CheckItemMiddleware extends MainMiddleware
+{
 
-	public function handle($id,$stock){
+	public function handle($id, $stock)
+	{
 		//--check your business logic--//
 		return $this->next();
 	}
@@ -758,8 +788,8 @@ You can add middlewares in prefix routes like the way you do in single routes an
 
 $route->group(['url_group' => 'admin' , 
 	'middleware' => ['App\Middlewares\CheckAdminMiddleware']
- ],function(){
- 	$this->resource('items','App\Controllers\ItemController');
+ ], function(){
+ 	$this->resource('items', 'App\Controllers\ItemController');
  });
 
 ```
@@ -768,8 +798,8 @@ You can add only middleware in prefix routes.
 
 ```php
 
-$route->group(['middleare' => ['App\Middlewares\CheckUserMiddleware'] ],function(){
-	$this->get('order','App\Controllers\OrderController@order');
+$route->group(['middleare' => ['App\Middlewares\CheckUserMiddleware'] ], function(){
+	$this->get('order', 'App\Controllers\OrderController@order');
 });
 
 ```
@@ -819,7 +849,7 @@ use JiJiHoHoCoCo\IchiRoute\Router\Route;
 generateCSRFToken();
 
 $route = new Route;
-$route->post('items','App\ItemController@create',[
+$route->post('items', 'App\ItemController@create', [
 'JiJiHoHoCoCo\IchiRoute\Middleware\CSRFMiddleware'
 ]);
 ```
@@ -827,14 +857,13 @@ $route->post('items','App\ItemController@create',[
 You can add <b>JiJiHoHoCoCo\IchiRoute\Middleware\CSRFMiddleware</b> in your prefix routes too.
 
 ```php
-
 use JiJiHoHoCoCo\IchiRoute\Router\Route;
 
 generateCSRFToken();
 
 $route = new Route;
 $route->group(['middleare' => 
-	['JiJiHoHoCoCo\IchiRoute\Middleware\CSRFMiddleware'] ],function(){
+	['JiJiHoHoCoCo\IchiRoute\Middleware\CSRFMiddleware'] ], function(){
 	$this->post('items','App\ItemController@create');
 });
 
@@ -857,7 +886,7 @@ You can add middleware to accept only API request for your route
 
 ```php
 
-$route->get('items_api','App\Controllers\ItemController@getItems',[
+$route->get('items_api', 'App\Controllers\ItemController@getItems', [
 	'JiJiHoHoCoCo\IchiRoute\Middleware\APIMiddleware'
 ]);
 
@@ -871,7 +900,7 @@ You can make CORS to get your data from another domains
 
 ```php
 
-$route->get('items_api','App\Controllers\ItemController@getItems',[
+$route->get('items_api', 'App\Controllers\ItemController@getItems', [
 	'JiJiHoHoCoCo\IchiRoute\Middleware\CORSMiddleware'
 ]);
 
@@ -883,13 +912,13 @@ You can make options for your CORS with <b>JiJiHoHoCoCo\IchiRoute\Setting\CORS</
  
 use JiJiHoHoCoCo\IchiRoute\Setting\CORS;
 
-CORS::setAvialableSites(['http://domain-one.com','http://domain-two.com']);
+CORS::setAvialableSites(['http://domain-one.com', 'http://domain-two.com']);
 // To set Access Control Allow Origins (default is '*')
 
 CORS::setAvailableSitesRegex(['/w3schools/']);
 // To set Access Control Allow Origins according to regex
 
-CORS::setAvialableMethods(['GET','POST']);
+CORS::setAvialableMethods(['GET', 'POST']);
 // To set Access Control Allow Origin Methods (default is '*')
 
 CORS::setAvailableHeaders(['X-Custom-Header','Upgrade-Insecure-Requests']);
@@ -944,7 +973,7 @@ Add your redis object with expired time in seconds
 
 ```php
 
-$route->setRedis($redisObject,10000);
+$route->setRedis($redisObject, 10000);
 
 ```
 
@@ -961,7 +990,7 @@ Add your memcached object with expired time in seconds
 
 ```php
 
-$route->setMemcached($memcachedObject,10000);
+$route->setMemcached($memcachedObject, 10000);
 
 ```
 
@@ -994,7 +1023,7 @@ You can customize error message and HTTP response code
 
 use JiJiHoHoCoCo\IchiRoute\UI\ErrorPage;
 
-echo ErrorPage::show('403 - Unauthorized Request',403);
+echo ErrorPage::show('403 - Unauthorized Request', 403);
 exit();
 ```
 
@@ -1024,7 +1053,7 @@ If you want to show more specific error according to your HTTP response code, yo
 
 use JiJiHoHoCoCo\IchiRoute\UI\ErrorPage;
 
-$errorPage = function($message,$code){
+$errorPage = function($message, $code) {
 		return <<<HTML
 			<html>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"> 

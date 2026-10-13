@@ -35,7 +35,7 @@ class Route
     private $usedMultipleDomains = false;
     private $keyValues = [];
     private static $caller = [];
-    const PAGE_NOT_FOUND = "404 - URL is not found.";
+    public const PAGE_NOT_FOUND = "404 - URL is not found.";
 
     public function __construct()
     {
@@ -80,7 +80,7 @@ class Route
         return isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $this->host->getDefaultDomain();
     }
 
-    public function setRedis($redis, int $redisCachedTime = null)
+    public function setRedis($redis, ?int $redisCachedTime = null)
     {
         try {
             self::$caller = getCallerInfo();
@@ -126,7 +126,7 @@ class Route
         return $this->memcached;
     }
 
-    public function setPDO(PDO $pdo, int $pdoCachedTime = null)
+    public function setPDO(PDO $pdo, ?int $pdoCachedTime = null)
     {
         try {
             self::$caller = getCallerInfo();
