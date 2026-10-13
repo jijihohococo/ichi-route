@@ -9,13 +9,13 @@ class RouteCache
     public $pdo;
     public $pdoCachedTime;
 
-    public function __construct(PDO $pdo, int $pdoCachedTime = null)
+    public function __construct(PDO $pdo, ?int $pdoCachedTime = null)
     {
         $this->pdo = $pdo;
         $this->pdoCachedTime = $pdoCachedTime;
     }
 
-    public function set(string $routeKey, string $routeMethod, int $expiredTime = null)
+    public function set(string $routeKey, string $routeMethod, ?int $expiredTime = null)
     {
 
         $expiredTime = $expiredTime !== null ? addExpiredDateTime($expiredTime) : $expiredTime;
