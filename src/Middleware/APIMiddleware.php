@@ -11,8 +11,7 @@ class APIMiddleware extends MainMiddleware
         $headers = getallheaders();
 
         if (!isset($headers['Content-Type']) || (isset($headers['Content-Type']) && $headers['Content-Type'] !== 'application/json')) {
-            echo ErrorPage::show('405 - Only API Request is allowed', 405);
-            exit();
+            return showErrorPage('405 - Only API Request is allowed', 405);
         }
         return $this->next();
     }
