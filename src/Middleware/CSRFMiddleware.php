@@ -14,14 +14,13 @@ class CSRFMiddleware extends MainMiddleware
             $_SERVER['REQUEST_METHOD'] == 'POST' &&
             ((isset($_SESSION['csrf_token']) && isset($_REQUEST['csrf_token']) && $_REQUEST['csrf_token'] !== $_SESSION['csrf_token']) ||
                 (!isset($_SESSION['csrf_token'])) ||
-                (!isset($_REQUEST['csrf_token'])) )
+                (!isset($_REQUEST['csrf_token'])))
         ) {
             if (isset($_SESSION['csrf_token'])) {
                 unset($_SESSION['csrf_token']);
             }
 
-            echo ErrorPage::show('401 - CSRF Token Expired', 401);
-            exit();
+            return showErrorPage('401 - CSRF Token Expired', 401);
         }
         return $this->next();
     }

@@ -1005,27 +1005,11 @@ $route->setMemcached($memcachedObject);
 
 ## Error Page Customization
 
-You can call the error page (whatever it is default or customized)
-
-```php
-
-use JiJiHoHoCoCo\IchiRoute\UI\ErrorPage;
-
-echo ErrorPage::show();
-exit();
-```
-
-Default eror message is "404 - URL is not found".
-Default HTTP response code is 404.
-
 You can customize error message and HTTP response code
 
 ```php
 
-use JiJiHoHoCoCo\IchiRoute\UI\ErrorPage;
-
-echo ErrorPage::show('403 - Unauthorized Request', 403);
-exit();
+showErrorPage('403 - Unauthorized Request', 403);
 ```
 
 If you don't like the default error page from this library,you can show the own error page
